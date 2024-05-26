@@ -10,4 +10,11 @@ export * from "./libs/opcodes";
 export * from "./libs/permissions";
 
 // ./structures/*
+export * from "./structures/emojis";
+export * from "./structures/entitlements";
+export * from "./structures/roles";
+export * from "./structures/skus";
+export * from "./structures/stages";
+export * from "./structures/stickers";
+export * from "./structures/teams";
 export * from "./structures/users";
