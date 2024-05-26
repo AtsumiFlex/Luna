@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@luna/test",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only --no-notify src/index.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@luna/core": "workspace:*",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tslib": "^2.6.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@luna/eslint-config": "workspace:*",
+    "@luna/ts-config": "workspace:*"
+  }
+}
