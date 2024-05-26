@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@luna/eslint-config",
+  "private": true,
+  "files": [
+    "node.js"
+  ],
+  "devDependencies": {
+    "@types/eslint": "^8.56.10",
+    "eslint": "^8",
+    "eslint-config-neon": "^0.1.62"
+  }
+}
