@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { Integer, Snowflake } from "../globals/formats";
 import { LocalesEnum } from "../globals/locales";
+import { ApplicationRoleConnectionMetadataStructure } from "./applications";
 
 /**
  * Schema for the Application Role Connection Structure.
@@ -29,7 +30,7 @@ export const ApplicationRoleConnectionStructure = z.object({
 	 * @example
 	 * const roleConnection = { metadata: { key: "value" } };
 	 */
-	metadata: z.record(z.string().max(100)),
+	metadata: z.record(z.string(), ApplicationRoleConnectionMetadataStructure),
 });
 
 /**
