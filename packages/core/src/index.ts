@@ -12,6 +12,8 @@ export * from "./libs/permissions";
 // ./structures/*
 export * from "./structures/emojis";
 export * from "./structures/entitlements";
+export * from "./structures/moderations";
+export * from "./structures/polls";
 export * from "./structures/roles";
 export * from "./structures/skus";
 export * from "./structures/stages";
