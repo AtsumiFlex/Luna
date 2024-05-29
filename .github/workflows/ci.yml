@@ -18,19 +18,19 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-          cache: 'pnpm'
+          cache: 'node'
 
       - name: Install dependencies
-        run: pnpm install
+        run: node install
 
       - name: Build
-        run: pnpm build
+        run: node build
 
       - name: Lint
-        run: pnpm lint
+        run: node lint
 
       - name: Dev
-        run: pnpm dev
+        run: node dev
 
       - name: Test
-        run: pnpm test
+        run: node test
