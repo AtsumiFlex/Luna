@@ -11,6 +11,7 @@ export * from "./libs/permissions";
 
 // ./structures/*
 export * from "./structures/applications";
+export * from "./structures/audits";
 /**
  * TODO: Add TSDoc to channels.ts
  */
@@ -21,6 +22,11 @@ export * from "./structures/entitlements";
  * TODO: Add TSDoc to guilds.ts
  */
 export * from "./structures/guilds";
+/**
+ * TODO: Add TSDoc to interactions.ts
+ */
+export * from "./structures/interactions";
+export * from "./structures/invites";
 export * from "./structures/moderations";
 export * from "./structures/polls";
 export * from "./structures/roles";
