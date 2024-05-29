@@ -18,19 +18,30 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Cache pnpm store
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: node install
+        run: pnpm install
 
       - name: Build
-        run: node build
+        run: pnpm build
 
       - name: Lint
-        run: node lint
+        run: pnpm lint
 
       - name: Dev
-        run: node dev
+        run: pnpm dev
 
       - name: Test
-        run: node test
+        run: pnpm test
