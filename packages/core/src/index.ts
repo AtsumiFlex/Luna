@@ -11,6 +11,10 @@ export * from "./libs/permissions";
 
 // ./structures/*
 export * from "./structures/applications";
+/**
+ * TODO: Add TSDoc to channels.ts
+ */
+export * from "./structures/channels";
 export * from "./structures/emojis";
 export * from "./structures/entitlements";
 /**

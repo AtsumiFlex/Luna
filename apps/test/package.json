@@ -2,8 +2,7 @@
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@luna/test",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only --no-notify src/index.ts",
-    "test": "jest"
+    "dev": "ts-node-dev --respawn --transpile-only --no-notify src/index.ts"
   },
   "dependencies": {
     "@luna/core": "workspace:*",

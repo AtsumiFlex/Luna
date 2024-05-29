@@ -4,8 +4,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "test": "jest"
+    "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "tslib": "^2.6.2",
