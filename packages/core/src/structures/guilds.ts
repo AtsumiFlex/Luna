@@ -2,6 +2,7 @@ import { z } from "zod";
 import { Integer, ISO8601Timestamp, Snowflake } from "../globals/formats";
 import { LocalesEnum } from "../globals/locales";
 import { OAuth2ScopesEnum } from "../libs/oauth2";
+import { ChannelStructure } from "./channels";
 import { EmojiStructure } from "./emojis";
 import { RoleStructure } from "./roles";
 import { StickerStructure } from "./stickers";
@@ -424,9 +425,9 @@ export const GuildWidgetStructure = z.object({
 	 */
 	instant_invite: z.string().nullable(),
 	/**
-	 * TODO: The voice channels in the guild
+	 * The voice channels in the guild
 	 */
-	channels: z.array(z.unknown()),
+	channels: z.array(ChannelStructure),
 	/**
 	 * The members in the guild
 	 */

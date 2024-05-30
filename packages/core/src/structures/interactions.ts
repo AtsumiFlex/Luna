@@ -629,7 +629,7 @@ export const InteractionCallbackDataStructure = z.object({
 	/**
 	 * Allowed mentions object
 	 */
-	allowed_mentions: AllowedMentionsStructure.optional(),
+	allowed_mentions: z.lazy(() => AllowedMentionsStructure).optional(),
 	/**
 	 * Message flags combined as a bitfield (only SUPPRESS_EMBEDS, EPHEMERAL, and SUPPRESS_NOTIFICATIONS can be set)
 	 */
@@ -641,7 +641,7 @@ export const InteractionCallbackDataStructure = z.object({
 	/**
 	 * Attachment objects with filename and description
 	 */
-	attachments: z.array(AttachmentStructure.partial()).optional(),
+	attachments: z.array(z.lazy(() => AttachmentStructure.partial())).optional(),
 	/**
 	 * A poll!
 	 */
@@ -652,17 +652,6 @@ export type InteractionCallbackDataStructureInfer = z.infer<typeof InteractionCa
 
 /**
  * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-interaction-callback-type}
- */
-/**
- * NAME	VALUE	DESCRIPTION
- * PONG	1	ACK a Ping
- * CHANNEL_MESSAGE_WITH_SOURCE	4	respond to an interaction with a message
- * DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE	5	ACK an interaction and edit a response later, the user sees a loading state
- * DEFERRED_UPDATE_MESSAGE*	6	for components, ACK an interaction and edit the original message later; the user does not see a loading state
- * UPDATE_MESSAGE*	7	for components, edit the message the component was attached to
- * APPLICATION_COMMAND_AUTOCOMPLETE_RESULT	8	respond to an autocomplete interaction with suggested choices
- * MODAL**	9	respond to an interaction with a popup modal
- * PREMIUM_REQUIRED***	10	respond to an interaction with an upgrade button, only available for apps with monetization enabled
  */
 export enum InteractionCallbackType {
 	/**
@@ -740,7 +729,7 @@ export const MessageInteractionStructure = z.object({
 	/**
 	 * Member who invoked the interaction in the guild
 	 */
-	member: GuildMemberStructure.partial().optional(),
+	member: z.lazy(() => GuildMemberStructure.partial()).optional(),
 });
 
 export type MessageInteractionStructureInfer = z.infer<typeof MessageInteractionStructure>;
@@ -790,7 +779,7 @@ export const ResolvedDataStructure = z.object({
 	/**
 	 * The ids and partial Member objects
 	 */
-	members: z.map(Snowflake, GuildMemberStructure.partial()).optional(),
+	members: z.map(Snowflake, z.lazy(() => GuildMemberStructure.partial())).optional(),
 	/**
 	 * The ids and Role objects
 	 */
@@ -798,11 +787,11 @@ export const ResolvedDataStructure = z.object({
 	/**
 	 * The ids and partial Channel objects
 	 */
-	channels: z.map(Snowflake, ChannelStructure.partial()).optional(),
+	channels: z.map(Snowflake, z.lazy(() => ChannelStructure.partial())).optional(),
 	/**
 	 * The ids and partial Message objects
 	 */
-	messages: z.map(Snowflake, MessageStructure.partial()).optional(),
+	messages: z.map(Snowflake, MessageStructure).optional(),
 	/**
 	 * The ids and attachment objects
 	 */
@@ -930,7 +919,7 @@ export const InteractionStructure = z.object({
 	/**
 	 * Guild that the interaction was sent from
 	 */
-	guild: GuildStructure.partial().optional(),
+	guild: z.lazy(() => GuildStructure.partial()).optional(),
 	/**
 	 * Guild that the interaction was sent from
 	 */
@@ -938,7 +927,7 @@ export const InteractionStructure = z.object({
 	/**
 	 * Channel that the interaction was sent from
 	 */
-	channel: ChannelStructure.partial().optional(),
+	channel: z.lazy(() => ChannelStructure.partial()).optional(),
 	/**
 	 * Channel that the interaction was sent from
 	 */
@@ -946,7 +935,7 @@ export const InteractionStructure = z.object({
 	/**
 	 * Guild member data for the invoking user, including permissions
 	 */
-	member: GuildMemberStructure.partial().optional(),
+	member: z.lazy(() => GuildMemberStructure.partial()).optional(),
 	/**
 	 * User object for the invoking user, if invoked in a DM
 	 */
@@ -962,7 +951,7 @@ export const InteractionStructure = z.object({
 	/**
 	 * For components, the message they were attached to
 	 */
-	message: MessageStructure.optional(),
+	message: z.lazy(() => MessageStructure.optional()),
 	/**
 	 * Bitwise set of permissions the app has in the source location of the interaction
 	 */

@@ -1,15 +1,16 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@luna/test",
+  "name": "@luna/rest",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only --no-notify src/index.ts"
+    "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "@luna/core": "workspace:*",
-    "@luna/rest": "workspace:*",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
+    "eventemitter3": "^5.0.1",
     "tslib": "^2.6.2",
+    "undici": "^6.18.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
