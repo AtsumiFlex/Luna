@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@luna/eslint-config",
+  "name": "@lunajs/eslint-config",
   "private": true,
   "files": [
     "next.js",

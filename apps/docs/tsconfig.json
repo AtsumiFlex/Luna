@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@luna/ts-config/next.json",
+  "extends": "@lunajs/ts-config/next.json",
   "compilerOptions": {
     "plugins": [
       {

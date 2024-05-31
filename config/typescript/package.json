@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@luna/ts-config",
+  "name": "@lunajs/ts-config",
   "private": true,
   "files": [
     "base.json",

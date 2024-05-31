@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@luna/core",
+  "name": "@lunajs/core",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -11,7 +11,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@luna/eslint-config": "workspace:*",
-    "@luna/ts-config": "workspace:*"
+    "@lunajs/eslint-config": "workspace:*",
+    "@lunajs/ts-config": "workspace:*"
   }
 }

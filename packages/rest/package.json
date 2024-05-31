@@ -1,20 +1,20 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@luna/rest",
+  "name": "@lunajs/rest",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@luna/core": "workspace:*",
+    "@lunajs/core": "workspace:*",
     "eventemitter3": "^5.0.1",
     "tslib": "^2.6.2",
     "undici": "^6.18.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@luna/eslint-config": "workspace:*",
-    "@luna/ts-config": "workspace:*"
+    "@lunajs/eslint-config": "workspace:*",
+    "@lunajs/ts-config": "workspace:*"
   }
 }

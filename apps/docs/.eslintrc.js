@@ -1,2 +1,2 @@
 /** @type {import("eslint").Linter.Config} */
-module.exports = { extends: ["@luna/eslint-config/next.js"] };
+module.exports = { extends: ["@lunajs/eslint-config/next.js"] };

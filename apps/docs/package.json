@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@luna/docs",
+  "name": "@lunajs/docs",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -14,8 +14,8 @@
     "react-dom": "^18"
   },
   "devDependencies": {
-    "@luna/eslint-config": "workspace:*",
-    "@luna/ts-config": "workspace:*",
+    "@lunajs/eslint-config": "workspace:*",
+    "@lunajs/ts-config": "workspace:*",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

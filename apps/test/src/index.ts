@@ -1,9 +1,8 @@
-import { ImageFormats } from "@luna/core";
-import { CDN } from "@luna/rest";
+import { Rest } from "@lunajs/rest";
 
 const test = async () => {
-	const url = CDN.sticker("1245641352969195521", ImageFormats.PNG);
-	console.log(url);
+	const rest = new Rest("");
+	console.log(rest.url.toString());
 };
 
 void test();

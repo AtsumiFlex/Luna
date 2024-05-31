@@ -8,10 +8,10 @@ importers:
 
   .:
     devDependencies:
-      '@luna/eslint-config':
+      '@lunajs/eslint-config':
         specifier: workspace:*
         version: link:config/eslint
-      '@luna/ts-config':
+      '@lunajs/ts-config':
         specifier: workspace:*
         version: link:config/typescript
       husky:
@@ -36,10 +36,10 @@ importers:
         specifier: ^18
         version: 18.3.1(react@18.3.1)
     devDependencies:
-      '@luna/eslint-config':
+      '@lunajs/eslint-config':
         specifier: workspace:*
         version: link:../../config/eslint
-      '@luna/ts-config':
+      '@lunajs/ts-config':
         specifier: workspace:*
         version: link:../../config/typescript
       '@types/node':
@@ -66,10 +66,10 @@ importers:
 
   apps/test:
     dependencies:
-      '@luna/core':
+      '@lunajs/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@luna/rest':
+      '@lunajs/rest':
         specifier: workspace:*
         version: link:../../packages/rest
       ts-node:
@@ -85,10 +85,10 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
-      '@luna/eslint-config':
+      '@lunajs/eslint-config':
         specifier: workspace:*
         version: link:../../config/eslint
-      '@luna/ts-config':
+      '@lunajs/ts-config':
         specifier: workspace:*
         version: link:../../config/typescript
 
@@ -115,16 +115,16 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
-      '@luna/eslint-config':
+      '@lunajs/eslint-config':
         specifier: workspace:*
         version: link:../../config/eslint
-      '@luna/ts-config':
+      '@lunajs/ts-config':
         specifier: workspace:*
         version: link:../../config/typescript
 
   packages/rest:
     dependencies:
-      '@luna/core':
+      '@lunajs/core':
         specifier: workspace:*
         version: link:../core
       eventemitter3:
@@ -140,10 +140,10 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
-      '@luna/eslint-config':
+      '@lunajs/eslint-config':
         specifier: workspace:*
         version: link:../../config/eslint
-      '@luna/ts-config':
+      '@lunajs/ts-config':
         specifier: workspace:*
         version: link:../../config/typescript
 

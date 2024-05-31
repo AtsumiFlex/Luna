@@ -1,6 +1,2 @@
-// ./globals/*
-export * from "./globals/cdn";
+// ./globals
 export * from "./globals/rest";
-
-// ./routes/*
-export * from "./routes/oauth2";

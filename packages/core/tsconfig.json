@@ -1,13 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@luna/ts-config/base.json",
+  "extends": "@lunajs/ts-config/base.json",
   "compilerOptions": {
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "rootDir": "./src/",
     "baseUrl": "./",
     "outDir": "./dist/",
-    "target": "ESNext",
-    "declarationMap": true
+    "declarationMap": true,
   },
   "include": [
     "src/**/*.ts"
