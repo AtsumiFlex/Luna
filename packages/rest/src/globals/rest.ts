@@ -9,8 +9,13 @@ export type RestOptions = {
 	version: ApiVersions;
 };
 
-export type RestMakeRequestOptions = Dispatcher.DispatchOptions & {
+export type RestMakeRequestOptions<T> = {
+	body?: Dispatcher.DispatchOptions["body"];
+	headers?: Record<keyof DiscordHeadersInfer, string>;
+	method: Dispatcher.DispatchOptions["method"];
 	path: string;
+	query?: Dispatcher.DispatchOptions["query"];
+	type?: T;
 };
 
 export class Rest extends EventEmitter {
@@ -34,7 +39,7 @@ export class Rest extends EventEmitter {
 		};
 	}
 
-	public async makeRequest(options: RestMakeRequestOptions) {
+	public async makeRequest<T>(options: RestMakeRequestOptions<T>): Promise<T> {
 		try {
 			const response = await request(`${this._url}${options.path}`, {
 				headers: {
@@ -44,12 +49,7 @@ export class Rest extends EventEmitter {
 				...Object.fromEntries(Object.entries(options).filter(([key]) => key !== "path")),
 			});
 
-			if (response.statusCode >= 200 && response.statusCode < 300) {
-				return await response.body.json();
-			} else {
-				const errorBody = await response.body.text();
-				new Error(`Request failed with status code ${response.statusCode}: ${errorBody}`);
-			}
+			return await response.body.json() as T;
 		} catch (error) {
 			this.emit("error", error);
 			throw error;
