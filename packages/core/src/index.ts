@@ -37,5 +37,3 @@ export * from "./structures/teams";
 export * from "./structures/users";
 export * from "./structures/voices";
 export * from "./structures/webhooks";
-
-// Test
