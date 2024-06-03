@@ -6,7 +6,7 @@ import type {
 	SnowflakeInfer,
 	UserStructureInfer,
 } from "@lunajs/core";
-import { Integer, OAuth2Scopes, Snowflake } from "@lunajs/core";
+import { Integer, Snowflake } from "@lunajs/core";
 import { z } from "zod";
 import type { RestMakeRequestOptions } from "../globals/rest";
 
@@ -103,7 +103,6 @@ export function GetCurrentUserGuildMember(guildId: SnowflakeInfer): RestMakeRequ
 	return {
 		method: "GET",
 		path: `/users/@me/guilds/${Snowflake.parse(guildId)}`,
-		require: [OAuth2Scopes.GuildsMembersRead],
 	};
 }
 
@@ -174,7 +173,6 @@ export function GetCurrentUserConnections(): RestMakeRequestOptions<ConnectionSt
 	return {
 		method: "GET",
 		path: "/users/@me/connections",
-		require: [OAuth2Scopes.Connections],
 	};
 }
 
@@ -185,7 +183,6 @@ export function GetCurrentUserApplicationRoleConnections(applicationId: Snowflak
 	return {
 		method: "GET",
 		path: `/users/@me/applications/${Snowflake.parse(applicationId)}/role-connection`,
-		require: [OAuth2Scopes.RoleConnectionsWrite],
 	};
 }
 
@@ -217,6 +214,5 @@ export function UpdateCurrentUserApplicationRoleConnection(applicationId: Snowfl
 		method: "PATCH",
 		path: `/users/@me/applications/${Snowflake.parse(applicationId)}/role-connection`,
 		body: JSON.stringify(UpdateCurrentUserApplicationRoleConnectionJSON.parse(json)),
-		require: [OAuth2Scopes.RoleConnectionsWrite],
 	};
 }

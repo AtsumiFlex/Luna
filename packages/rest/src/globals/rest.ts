@@ -1,14 +1,13 @@
 import { URL } from "node:url";
-import type { DiscordHeadersInfer, OAuth2Scopes } from "@lunajs/core";
+import type { DiscordHeadersInfer } from "@lunajs/core";
 import { API_BASE_URL, ApiVersions, AuthTypes } from "@lunajs/core";
 import EventEmitter from "eventemitter3";
 import type { Dispatcher } from "undici";
 import { request } from "undici";
 
-export type RestMakeRequestOptions<T> = Dispatcher.DispatchOptions & {
-	headers?: Record<keyof DiscordHeadersInfer, string>;
+export type RestMakeRequestOptions<T> = Omit<Dispatcher.DispatchOptions, "headers"> & {
+	headers?: Partial<DiscordHeadersInfer>;
 	path: string;
-	require?: OAuth2Scopes[];
 };
 
 export type RestOptions = {
@@ -35,6 +34,7 @@ export class Rest extends EventEmitter {
 
 	public async makeRequest<T>(options: RestMakeRequestOptions<T>): Promise<T> {
 		const response = await request(`${this.url.toString()}${options.path}`, {
+			// @ts-expect-error
 			headers: {
 				...this.headers,
 				...options.headers,
