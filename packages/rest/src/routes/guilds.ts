@@ -2,13 +2,22 @@ import type {
 	BanStructureInfer,
 	ChannelStructureInfer,
 	GuildMemberStructureInfer,
+	GuildOnboardingStructureInfer,
 	GuildPreviewStructureInfer,
 	GuildScheduledEventStructureInfer,
 	GuildScheduledEventUserStructureInfer,
 	GuildStructureInfer,
 	GuildTemplateStructureInfer,
+	GuildWidgetSettingsStructureInfer,
+	GuildWidgetStructureInfer,
+	IntegerInfer,
+	IntegrationStructureInfer,
+	InviteMetadataStructureInfer,
+	InviteStructureInfer,
 	RoleStructureInfer,
 	SnowflakeInfer,
+	VoiceRegionStructureInfer,
+	WelcomeScreenStructureInfer,
 } from "@lunajs/core";
 import {
 	ChannelStructure,
@@ -20,6 +29,8 @@ import {
 	ForumTagStructure,
 	GuildFeaturesEnum,
 	GuildMemberFlagsEnum,
+	GuildOnboardingModeEnum,
+	GuildOnboardingPromptStructure,
 	GuildScheduledEventEntityMetadata,
 	GuildScheduledEventEntityTypesEnum,
 	GuildScheduledEventPrivacyLevelEnum,
@@ -27,6 +38,7 @@ import {
 	Integer,
 	ISO8601Timestamp,
 	LocalesEnum,
+	MFALevelEnum,
 	OverwriteStructure,
 	RoleStructure,
 	Snowflake,
@@ -35,6 +47,7 @@ import {
 	ThreadMemberStructure,
 	VerificationLevelEnum,
 	VideoQualityModesEnum,
+	WelcomeScreenChannelStructure,
 } from "@lunajs/core";
 import { z } from "zod";
 import type { RestMakeRequestOptions } from "../globals/rest";
@@ -1158,6 +1171,440 @@ export function CreateGuildRole(guildId: SnowflakeInfer, reason: string, data: C
 		method: "POST",
 		path: `/guilds/${Snowflake.parse(guildId)}/roles`,
 		body: JSON.stringify(CreateGuildRoleJSON.parse(data)),
+		headers: { "X-Audit-Log-Reason": reason },
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-guild-role-positions-json-params}
+ */
+export const ModifyGuildRolePositionsJSON = z.object({
+	/**
+	 * role
+	 */
+	id: Snowflake,
+	/**
+	 * sorting position of the role
+	 */
+	position: Integer.optional().nullable(),
+});
+
+export type ModifyGuildRolePositionsJSONInfer = z.infer<typeof ModifyGuildRolePositionsJSON>;
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-guild-role-positions}
+ */
+export function ModifyGuildRolePositions(guildId: SnowflakeInfer, reason: string, data: ModifyGuildRolePositionsJSONInfer[]): RestMakeRequestOptions<RoleStructureInfer[]> {
+	return {
+		method: "PATCH",
+		path: `/guilds/${Snowflake.parse(guildId)}/roles`,
+		body: JSON.stringify(ModifyGuildRolePositionsJSON.array().parse(data)),
+		headers: { "X-Audit-Log-Reason": reason },
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-guild-role-json-params}
+ */
+export const ModifyGuildRoleJSON = z.object({
+	/**
+	 * name of the role, max 100 characters
+	 */
+	name: z.string().max(100).optional().nullable(),
+	/**
+	 * bitwise value of the enabled/disabled permissions
+	 */
+	permissions: z.string().optional().nullable(),
+	/**
+	 * RGB color value
+	 */
+	color: Integer.optional().nullable(),
+	/**
+	 * whether the role should be displayed separately in the sidebar
+	 */
+	hoist: z.boolean().optional().nullable(),
+	/**
+	 * the role's icon image (if the guild has the ROLE_ICONS feature)
+	 */
+	icon: z.string().base64().optional().nullable(),
+	/**
+	 * the role's unicode emoji as a standard emoji (if the guild has the ROLE_ICONS feature)
+	 */
+	unicode_emoji: z.string().optional().nullable(),
+	/**
+	 * whether the role should be mentionable
+	 */
+	mentionable: z.boolean().optional().nullable(),
+});
+
+export type ModifyGuildRoleJSONInfer = z.infer<typeof ModifyGuildRoleJSON>;
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-guild-role}
+ */
+export function ModifyGuildRole(guildId: SnowflakeInfer, roleId: SnowflakeInfer, reason: string, data: ModifyGuildRoleJSONInfer): RestMakeRequestOptions<RoleStructureInfer> {
+	return {
+		method: "PATCH",
+		path: `/guilds/${Snowflake.parse(guildId)}/roles/${Snowflake.parse(roleId)}`,
+		body: JSON.stringify(ModifyGuildRoleJSON.parse(data)),
+		headers: { "X-Audit-Log-Reason": reason },
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-guild-mfa-level-json-params}
+ */
+export const ModifyGuildMFALevelJSON = z.object({
+	/**
+	 * MFA level
+	 */
+	level: MFALevelEnum,
+});
+
+export type ModifyGuildMFALevelJSONInfer = z.infer<typeof ModifyGuildMFALevelJSON>;
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-guild-mfa-level}
+ */
+export function ModifyGuildMFALevel(guildId: SnowflakeInfer, reason: string, data: ModifyGuildMFALevelJSONInfer): RestMakeRequestOptions<void> {
+	return {
+		method: "PATCH",
+		path: `/guilds/${Snowflake.parse(guildId)}/mfa`,
+		body: JSON.stringify(ModifyGuildMFALevelJSON.parse(data)),
+		headers: { "X-Audit-Log-Reason": reason },
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#delete-guild-role}
+ */
+export function DeleteGuildRole(guildId: SnowflakeInfer, roleId: SnowflakeInfer, reason: string): RestMakeRequestOptions<void> {
+	return {
+		method: "DELETE",
+		path: `/guilds/${Snowflake.parse(guildId)}/roles/${Snowflake.parse(roleId)}`,
+		headers: { "X-Audit-Log-Reason": reason },
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-prune-count-query-string-params}
+ */
+export const GetGuildPruneCountQuery = z.object({
+	/**
+	 * number of days to count prune for (1-30)
+	 */
+	days: z.number().min(1).max(30).default(7).optional(),
+	/**
+	 * role(s) to include
+	 */
+	include_roles: z.string().optional(),
+});
+
+export type GetGuildPruneCountQueryInfer = z.infer<typeof GetGuildPruneCountQuery>;
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-prune-count}
+ */
+export function GetGuildPruneCount(guildId: SnowflakeInfer, query?: GetGuildPruneCountQueryInfer): RestMakeRequestOptions<{
+	pruned: IntegerInfer;
+}> {
+	return {
+		method: "GET",
+		path: `/guilds/${Snowflake.parse(guildId)}/prune`,
+		query: GetGuildPruneCountQuery.parse(query),
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#begin-guild-prune-json-params}
+ */
+export const BeginGuildPruneJSON = z.object({
+	/**
+	 * number of days to prune (1-30)
+	 */
+	days: Integer.min(1).max(30).default(7),
+	/**
+	 * whether pruned is returned, discouraged for large guilds
+	 */
+	compute_prune_count: z.boolean().default(true),
+	/**
+	 * role(s) to include
+	 */
+	include_roles: z.array(Snowflake).optional(),
+	/**
+	 * reason for the prune (deprecated)
+	 *
+	 * @deprecated
+	 */
+	reason: z.string().optional(),
+});
+
+export type BeginGuildPruneJSONInfer = z.infer<typeof BeginGuildPruneJSON>;
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#begin-guild-prune}
+ */
+export function BeginGuildPrune(guildId: SnowflakeInfer, reason: string, data: BeginGuildPruneJSONInfer): RestMakeRequestOptions<{
+	pruned: IntegerInfer;
+}> {
+	return {
+		method: "POST",
+		path: `/guilds/${Snowflake.parse(guildId)}/prune`,
+		body: JSON.stringify(BeginGuildPruneJSON.parse(data)),
+		headers: { "X-Audit-Log-Reason": reason },
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-voice-regions}
+ */
+export function GetGuildVoiceRegions(guildId: SnowflakeInfer): RestMakeRequestOptions<VoiceRegionStructureInfer[]> {
+	return {
+		method: "GET",
+		path: `/guilds/${Snowflake.parse(guildId)}/regions`,
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-invites}
+ */
+export function GetGuildInvites(guildId: SnowflakeInfer): RestMakeRequestOptions<InviteMetadataStructureInfer[] | InviteStructureInfer[]> {
+	return {
+		method: "GET",
+		path: `/guilds/${Snowflake.parse(guildId)}/invites`,
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-integrations}
+ */
+export function GetGuildIntegrations(guildId: SnowflakeInfer): RestMakeRequestOptions<IntegrationStructureInfer[]> {
+	return {
+		method: "GET",
+		path: `/guilds/${Snowflake.parse(guildId)}/integrations`,
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#delete-guild-integration}
+ */
+export function DeleteGuildIntegration(guildId: SnowflakeInfer, integrationId: SnowflakeInfer, reason: string): RestMakeRequestOptions<void> {
+	return {
+		method: "DELETE",
+		path: `/guilds/${Snowflake.parse(guildId)}/integrations/${Snowflake.parse(integrationId)}`,
+		headers: { "X-Audit-Log-Reason": reason },
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-widget-settings}
+ */
+export function GetGuildWidgetSettings(guildId: SnowflakeInfer): RestMakeRequestOptions<GuildWidgetSettingsStructureInfer> {
+	return {
+		method: "GET",
+		path: `/guilds/${Snowflake.parse(guildId)}/widget`,
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-guild-widget}
+ */
+export function ModifyGuildWidget(guildId: SnowflakeInfer, reason: string, data: GuildWidgetSettingsStructureInfer): RestMakeRequestOptions<GuildWidgetSettingsStructureInfer> {
+	return {
+		method: "PATCH",
+		path: `/guilds/${Snowflake.parse(guildId)}/widget`,
+		body: JSON.stringify(data),
+		headers: { "X-Audit-Log-Reason": reason },
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-widget}
+ */
+export function GetGuildWidget(guildId: SnowflakeInfer): RestMakeRequestOptions<GuildWidgetStructureInfer> {
+	return {
+		method: "GET",
+		path: `/guilds/${Snowflake.parse(guildId)}/widget.json`,
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-vanity-url}
+ */
+export function GetGuildVanityURL(guildId: SnowflakeInfer): RestMakeRequestOptions<Partial<InviteStructureInfer>> {
+	return {
+		method: "GET",
+		path: `/guilds/${Snowflake.parse(guildId)}/vanity-url`,
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-widget-image-query-string-params}
+ */
+export const GetGuildWidgetImageQuery = z.object({
+	/**
+	 * style of the widget image returned (see below)
+	 */
+	style: z.union([z.literal("shield"), z.literal("banner1"), z.literal("banner2"), z.literal("banner3"), z.literal("banner4")]).optional(),
+});
+
+export type GetGuildWidgetImageQueryInfer = z.infer<typeof GetGuildWidgetImageQuery>;
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-widget-image}
+ */
+export function GetGuildWidgetImage(guildId: SnowflakeInfer, query?: GetGuildWidgetImageQueryInfer): RestMakeRequestOptions<void> {
+	return {
+		method: "GET",
+		path: `/guilds/${Snowflake.parse(guildId)}/widget.png`,
+		query: GetGuildWidgetImageQuery.parse(query),
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-welcome-screen}
+ */
+export function GetGuildWelcomeScreen(guildId: SnowflakeInfer): RestMakeRequestOptions<WelcomeScreenStructureInfer> {
+	return {
+		method: "GET",
+		path: `/guilds/${Snowflake.parse(guildId)}/welcome-screen`,
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-guild-welcome-screen-json-params}
+ */
+export const ModifyGuildWelcomeScreenJSON = z.object({
+	/**
+	 * whether the welcome screen is enabled
+	 */
+	enabled: z.boolean(),
+	/**
+	 * channels linked in the welcome screen and their display options
+	 */
+	welcome_channels: z.array(WelcomeScreenChannelStructure).optional(),
+	/**
+	 * the server description to show in the welcome screen
+	 */
+	description: z.string().optional().nullable(),
+});
+
+export type ModifyGuildWelcomeScreenJSONInfer = z.infer<typeof ModifyGuildWelcomeScreenJSON>;
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-guild-welcome-screen}
+ */
+export function ModifyGuildWelcomeScreen(guildId: SnowflakeInfer, reason: string, data: ModifyGuildWelcomeScreenJSONInfer): RestMakeRequestOptions<WelcomeScreenStructureInfer> {
+	return {
+		method: "PATCH",
+		path: `/guilds/${Snowflake.parse(guildId)}/welcome-screen`,
+		body: JSON.stringify(ModifyGuildWelcomeScreenJSON.parse(data)),
+		headers: { "X-Audit-Log-Reason": reason },
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-onboarding}
+ */
+export function GetGuildOnboarding(guildId: SnowflakeInfer): RestMakeRequestOptions<GuildOnboardingStructureInfer> {
+	return {
+		method: "GET",
+		path: `/guilds/${Snowflake.parse(guildId)}/onboarding`,
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-guild-onboarding-json-params}
+ */
+export const ModifyGuildOnboardingJSON = z.object({
+	/**
+	 * Prompts shown during onboarding and in customize community
+	 */
+	prompts: z.array(GuildOnboardingPromptStructure).optional(),
+	/**
+	 * Channel IDs that members get opted into automatically
+	 */
+	default_channel_ids: z.array(Snowflake).optional(),
+	/**
+	 * Whether onboarding is enabled in the guild
+	 */
+	enabled: z.boolean().optional(),
+	/**
+	 * Current mode of onboarding
+	 */
+	mode: GuildOnboardingModeEnum.optional(),
+});
+
+export type ModifyGuildOnboardingJSONInfer = z.infer<typeof ModifyGuildOnboardingJSON>;
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-guild-onboarding}
+ */
+export function ModifyGuildOnboarding(guildId: SnowflakeInfer, reason: string, data: ModifyGuildOnboardingJSONInfer): RestMakeRequestOptions<GuildOnboardingStructureInfer> {
+	return {
+		method: "PATCH",
+		path: `/guilds/${Snowflake.parse(guildId)}/onboarding`,
+		body: JSON.stringify(ModifyGuildOnboardingJSON.parse(data)),
+		headers: { "X-Audit-Log-Reason": reason },
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-current-user-voice-state-json-params}
+ */
+export const ModifyCurrentUserVoiceStateJSON = z.object({
+	/**
+	 * the id of the channel the user is currently in
+	 */
+	channel_id: Snowflake,
+	/**
+	 * toggles the user's suppress state
+	 */
+	suppress: z.boolean().optional(),
+	/**
+	 * sets the user's request to speak
+	 */
+	request_to_speak_timestamp: ISO8601Timestamp.optional().nullable(),
+});
+
+export type ModifyCurrentUserVoiceStateJSONInfer = z.infer<typeof ModifyCurrentUserVoiceStateJSON>;
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-current-user-voice-state}
+ */
+export function ModifyCurrentUserVoiceState(guildId: SnowflakeInfer, reason: string, data: ModifyCurrentUserVoiceStateJSONInfer): RestMakeRequestOptions<void> {
+	return {
+		method: "PATCH",
+		path: `/guilds/${Snowflake.parse(guildId)}/voice-states/@me`,
+		body: JSON.stringify(ModifyCurrentUserVoiceStateJSON.parse(data)),
+		headers: { "X-Audit-Log-Reason": reason },
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-user-voice-state-json-params}
+ */
+export const ModifyUserVoiceStateJSON = z.object({
+	/**
+	 * the id of the channel the user is currently in
+	 */
+	channel_id: Snowflake,
+	/**
+	 * toggles the user's suppress state
+	 */
+	suppress: z.boolean().optional(),
+});
+
+export type ModifyUserVoiceStateJSONInfer = z.infer<typeof ModifyUserVoiceStateJSON>;
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#modify-user-voice-state}
+ */
+export function ModifyUserVoiceState(guildId: SnowflakeInfer, userId: SnowflakeInfer, reason: string, data: ModifyUserVoiceStateJSONInfer): RestMakeRequestOptions<void> {
+	return {
+		method: "PATCH",
+		path: `/guilds/${Snowflake.parse(guildId)}/voice-states/${Snowflake.parse(userId)}`,
+		body: JSON.stringify(ModifyUserVoiceStateJSON.parse(data)),
 		headers: { "X-Audit-Log-Reason": reason },
 	};
 }
