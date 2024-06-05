@@ -7,6 +7,7 @@ import type {
 	GuildScheduledEventUserStructureInfer,
 	GuildStructureInfer,
 	GuildTemplateStructureInfer,
+	RoleStructureInfer,
 	SnowflakeInfer,
 } from "@lunajs/core";
 import {
@@ -1099,6 +1100,64 @@ export function BulkGuildBan(guildId: SnowflakeInfer, reason: string, data: Bulk
 		method: "PUT",
 		path: `/guilds/${Snowflake.parse(guildId)}/bans`,
 		body: JSON.stringify(BulkGuildBanJSON.parse(data)),
+		headers: { "X-Audit-Log-Reason": reason },
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#get-guild-roles}
+ */
+export function GetGuildRoles(guildId: SnowflakeInfer): RestMakeRequestOptions<RoleStructureInfer[]> {
+	return {
+		method: "GET",
+		path: `/guilds/${Snowflake.parse(guildId)}/roles`,
+	};
+}
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#create-guild-role-json-params}
+ */
+export const CreateGuildRoleJSON = z.object({
+	/**
+	 * name of the role, max 100 characters
+	 */
+	name: z.string().max(100).default("new role"),
+	/**
+	 * bitwise value of the enabled/disabled permissions
+	 */
+	permissions: z.string(),
+	/**
+	 * RGB color value
+	 */
+	color: Integer.default(0),
+	/**
+	 * whether the role should be displayed separately in the sidebar
+	 */
+	hoist: z.boolean().default(false),
+	/**
+	 * the role's icon image (if the guild has the ROLE_ICONS feature)
+	 */
+	icon: z.string().base64().optional().nullable(),
+	/**
+	 * the role's unicode emoji as a standard emoji (if the guild has the ROLE_ICONS feature)
+	 */
+	unicode_emoji: z.string().optional().nullable(),
+	/**
+	 * whether the role should be mentionable
+	 */
+	mentionable: z.boolean().default(false),
+});
+
+export type CreateGuildRoleJSONInfer = z.infer<typeof CreateGuildRoleJSON>;
+
+/**
+ * @see {@link https://discord.com/developers/docs/resources/guild#create-guild-role}
+ */
+export function CreateGuildRole(guildId: SnowflakeInfer, reason: string, data: CreateGuildRoleJSONInfer): RestMakeRequestOptions<RoleStructureInfer> {
+	return {
+		method: "POST",
+		path: `/guilds/${Snowflake.parse(guildId)}/roles`,
+		body: JSON.stringify(CreateGuildRoleJSON.parse(data)),
 		headers: { "X-Audit-Log-Reason": reason },
 	};
 }
