@@ -1,30 +1,22 @@
+import { setInterval } from "node:timers";
+import { URL } from "node:url";
 import type { IntegerInfer } from "@lunajs/core";
-import { ApiVersionsEnum } from "@lunajs/core";
+import { GatewayOpcodes } from "@lunajs/core";
 import EventEmitter from "eventemitter3";
+import type { RawData } from "ws";
 import WebSocket from "ws";
-import { z } from "zod";
+import type { GatewayConnectURLQueryInfer, GatewayPayloadInfer, GatewaySendEvents } from "./types";
+import { GatewayPayload } from "./types";
 
-/**
- * @see {@link https://discord.com/developers/docs/topics/gateway#connecting-gateway-url-query-string-params}
- */
-export const GatewayConnectURLQuery = z.object({
-	/**
-	 * API Version to use
-	 */
-	v: ApiVersionsEnum,
-	/**
-	 * The encoding of received gateway packets
-	 */
-	encoding: z.union([z.literal("json"), z.literal("etf")]),
-	/**
-	 * The optional transport compression of gateway packets
-	 */
-	compress: z.union([z.literal("zlib-stream"), z.literal("zstd-stream")]).optional(),
-});
+export type GatewayEvents = {
+	close: [number, string];
+	debug: [string];
+	disconnect: [string];
+	error: [Error];
+	message: [RawData];
+};
 
-export type GatewayConnectURLQueryInfer = z.infer<typeof GatewayConnectURLQuery>;
-
-export class Gateway extends EventEmitter {
+export class Gateway extends EventEmitter<GatewayEvents> {
 	private _ws: WebSocket | null = null;
 
 	private _heartbeatInterval: NodeJS.Timeout | null = null;
@@ -33,11 +25,11 @@ export class Gateway extends EventEmitter {
 
 	public constructor(public token: string, public options: GatewayConnectURLQueryInfer) {
 		super();
+		this._connect();
 	}
 
 	public get url() {
 		const url = new URL("wss://gateway.discord.gg/");
-
 		url.searchParams.set("v", String(this.options.v));
 		url.searchParams.set("encoding", this.options.encoding);
 
@@ -55,36 +47,74 @@ export class Gateway extends EventEmitter {
 
 		this._ws.close();
 		this._ws = null;
-		this.emit("disconnect", 1_000, "User requested");
+		this.emit("disconnect", "[WS] Gateway closed");
 	}
 
 	public restart() {
+		this.emit("debug", "[WS] Restarting gateway...");
 		this.disconnect();
-		this.connect();
+		this._connect();
 	}
 
-	public connect() {
-		if (this._ws) {
-			return;
+	public send<K extends keyof GatewaySendEvents>(op: K, ...data: GatewaySendEvents[K]) {
+		if (!this._ws || this._ws.readyState !== WebSocket.OPEN) {
+			throw new Error("WebSocket is not connected");
 		}
 
+		const payload: GatewayPayloadInfer = {
+			op,
+			d: data[0],
+			s: null,
+			t: null,
+		};
+
+		this.emit("debug", `[WS] Sending payload: ${JSON.stringify(payload)}`);
+		this._ws.send(JSON.stringify(GatewayPayload.parse(payload)));
+	}
+
+	private _connect() {
+		this.emit("debug", "[WS] Connecting to gateway...");
 		this._ws = new WebSocket(this.url.toString());
+		this.emit("debug", `[WS] Gateway URL: ${this.url.toString()}`);
 
 		this._ws.on("open", () => {
-			// TODO: Faire le heartbeat
-			this.emit("connect");
-		});
-
-		this._ws.on("message", (data) => {
-			this.emit("message", data);
+			this.emit("debug", "[WS] Gateway connected");
 		});
 
 		this._ws.on("close", (code, reason) => {
-			this.emit("disconnect", code, reason);
+			this.emit("close", code, reason.toString());
 		});
 
 		this._ws.on("error", (error) => {
 			this.emit("error", error);
 		});
+
+		this._ws.on("message", (data) => {
+			const parsedData: any = JSON.parse(data.toString());
+			if (parsedData.op === GatewayOpcodes.Hello) {
+				this._heartbeat(parsedData.d.heartbeat_interval);
+				this.send(GatewayOpcodes.Identify, {
+					token: this.token,
+					intents: 513,
+					properties: {
+						os: "linux",
+						browser: "lunajs",
+						device: "lunajs",
+					},
+				});
+			}
+
+			this.emit("message", data);
+		});
+	}
+
+	private _heartbeat(interval: IntegerInfer) {
+		if (!this._ws || this._ws.readyState !== WebSocket.OPEN) {
+			return;
+		}
+
+		this._heartbeatInterval = setInterval(() => {
+			this.send(GatewayOpcodes.Heartbeat, null);
+		}, interval);
 	}
 }

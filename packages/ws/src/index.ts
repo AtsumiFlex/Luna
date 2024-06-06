@@ -19,3 +19,4 @@ export * from "./events/webhooks";
 export * from "./globals/gateway";
 export * from "./globals/intents";
 export * from "./globals/shards";
+export * from "./globals/types";
