@@ -79,6 +79,34 @@ importers:
         specifier: workspace:*
         version: link:../../config/typescript
 
+  packages/ws:
+    dependencies:
+      '@lunajs/core':
+        specifier: workspace:*
+        version: link:../core
+      '@lunajs/rest':
+        specifier: workspace:*
+        version: link:../rest
+      eventemitter3:
+        specifier: ^5.0.1
+        version: 5.0.1
+      tslib:
+        specifier: ^2.6.2
+        version: 2.6.2
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@lunajs/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint
+      '@lunajs/ts-config':
+        specifier: workspace:*
+        version: link:../../config/typescript
+      '@types/ws':
+        specifier: ^8.5.10
+        version: 8.5.10
+
 packages:
 
   '@angular-eslint/bundled-angular-compiler@17.5.1':
@@ -320,6 +348,9 @@ packages:
 
   '@types/unist@3.0.2':
     resolution: {integrity: sha512-dqId9J8K/vGi5Zr7oo212BGii5m3q5Hxlkwy3WpYuKPklmBEvsbMYYyLxAQpSffdLl/gdW0XUpKWFvYmyoWCoQ==}
+
+  '@types/ws@8.5.10':
+    resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
 
   '@types/yargs-parser@21.0.3':
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
@@ -2658,6 +2689,10 @@ snapshots:
   '@types/unist@2.0.10': {}
 
   '@types/unist@3.0.2': {}
+
+  '@types/ws@8.5.10':
+    dependencies:
+      '@types/node': 20.12.12
 
   '@types/yargs-parser@21.0.3': {}
 

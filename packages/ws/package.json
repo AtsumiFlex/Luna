@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@lunajs/ws",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint --ext .ts . --fix"
+  },
+  "dependencies": {
+    "@lunajs/core": "workspace:*",
+    "@lunajs/rest": "workspace:*",
+    "eventemitter3": "^5.0.1",
+    "tslib": "^2.6.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@lunajs/eslint-config": "workspace:*",
+    "@lunajs/ts-config": "workspace:*",
+    "@types/ws": "^8.5.10"
+  }
+}
