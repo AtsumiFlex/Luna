@@ -16,6 +16,9 @@ export * from "./events/voices";
 export * from "./events/webhooks";
 
 // ./globals/*
+/**
+ * TODO: Faire les TSDoc pour les globals
+ */
 export * from "./globals/gateway";
 export * from "./globals/intents";
 export * from "./globals/shards";

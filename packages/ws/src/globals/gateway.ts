@@ -23,7 +23,7 @@ export class Gateway extends EventEmitter<GatewayEvents> {
 
 	private _sequence: IntegerInfer | null = null;
 
-	public constructor(public token: string, public options: GatewayConnectURLQueryInfer) {
+	public constructor(public token: string, private readonly options: GatewayConnectURLQueryInfer) {
 		super();
 		this._connect();
 	}
