@@ -5,9 +5,11 @@ import type {
 	AutoModerationRuleStructureInfer,
 	ChannelStructureInfer,
 	EntitlementStructureInfer,
+	GatewayOpcodes,
 	GuildMemberStructureInfer,
 	GuildScheduledEventStructureInfer,
 	GuildStructureInfer,
+	IntegerInfer,
 	IntegrationStructureInfer,
 	InteractionStructureInfer,
 	MessageStructureInfer,
@@ -63,7 +65,11 @@ import type { PresenceUpdateFieldsInfer, TypingStartFieldsInfer } from "../event
 import type { ReadyFieldsInfer } from "../events/ready";
 import type { VoiceServerUpdateFieldsInfer } from "../events/voices";
 import type { WebhooksUpdateFieldsInfer } from "../events/webhooks";
+import type { GatewayIdentifyInfer } from "../other/identify";
+import type { GatewayRequestGuildMembersInfer } from "../other/members";
+import type { GatewayPresenceUpdateInfer } from "../other/presences";
 import type { GatewayResumeInfer } from "../other/resume";
+import type { GatewayVoiceStateUpdateInfer } from "../other/states";
 
 /**
  * @see {@link https://discord.com/developers/docs/topics/gateway-events#receive-events}
@@ -144,3 +150,16 @@ export type GatewayEvents = {
 	WARN: [message: string];
 	WEBHOOKS_UPDATE: [webhhoks: WebhooksUpdateFieldsInfer];
 };
+
+/**
+ * @see {@link https://discord.com/developers/docs/topics/gateway-events#send-events}
+ */
+export type GatewaySendEvents = {
+	[GatewayOpcodes.Heartbeat]: IntegerInfer | null;
+	[GatewayOpcodes.Identify]: GatewayIdentifyInfer;
+	[GatewayOpcodes.RequestGuildMembers]: GatewayRequestGuildMembersInfer;
+	[GatewayOpcodes.Resume]: GatewayResumeInfer;
+	[GatewayOpcodes.PresenceUpdate]: GatewayPresenceUpdateInfer;
+	[GatewayOpcodes.VoiceStateUpdate]: GatewayVoiceStateUpdateInfer;
+};
+

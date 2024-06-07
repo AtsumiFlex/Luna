@@ -24,7 +24,6 @@ export * from "./globals/events";
 export * from "./globals/gateway";
 export * from "./globals/intents";
 export * from "./globals/shards";
-export * from "./globals/types";
 
 // ./other/*
 export * from "./other/connections";
