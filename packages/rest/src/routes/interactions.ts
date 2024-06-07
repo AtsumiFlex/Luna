@@ -17,7 +17,7 @@ import type {
 	EditGuildApplicationCommandJSONInfer,
 	GetGlobalApplicationCommandsQueryInfer,
 	GetGuildApplicationCommandsQueryInfer,
-} from "../libs/interactions";
+} from "../pipes/interactions";
 import {
 	BulkOverwriteGuildApplicationCommandsJSON,
 	CreateGlobalApplicationCommandJSON,
@@ -27,21 +27,21 @@ import {
 	EditGuildApplicationCommandJSON,
 	GetGlobalApplicationCommandsQuery,
 	GetGuildApplicationCommandsQuery,
-} from "../libs/interactions";
+} from "../pipes/interactions";
 import type {
 	EditWebhookMessageJSONInfer,
 	EditWebhookMessageQueryInfer,
 	ExecuteWebhookJSONInfer,
 	ExecuteWebhookQueryInfer,
 	GetWebhookMessageQueryInfer,
-} from "../libs/webhooks";
+} from "../pipes/webhooks";
 import {
 	EditWebhookMessageJSON,
 	EditWebhookMessageQuery,
 	ExecuteWebhookJSON,
 	ExecuteWebhookQuery,
 	GetWebhookMessageQuery,
-} from "../libs/webhooks";
+} from "../pipes/webhooks";
 
 /**
  * @see {@link https://discord.com/developers/docs/interactions/application-commands#get-global-application-commands}

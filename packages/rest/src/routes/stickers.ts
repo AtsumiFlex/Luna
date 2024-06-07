@@ -6,8 +6,8 @@ import type {
 	CreateGuildStickerFormInfer,
 	ListStickerPacksResponseInfer,
 	ModifyGuildStickerJSONInfer,
-} from "../libs/stickers";
-import { ModifyGuildStickerJSON } from "../libs/stickers";
+} from "../pipes/stickers";
+import { ModifyGuildStickerJSON } from "../pipes/stickers";
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/sticker#get-sticker}

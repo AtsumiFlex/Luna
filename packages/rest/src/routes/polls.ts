@@ -1,8 +1,8 @@
 import type { MessageStructureInfer, SnowflakeInfer } from "@lunajs/core";
 import { Snowflake } from "@lunajs/core";
 import type { RestMakeRequestOptions } from "../globals/rest";
-import type { GetAnswerVotersQueryInfer, GetAnswerVotersResponseInfer } from "../libs/polls";
-import { GetAnswerVotersQuery } from "../libs/polls";
+import type { GetAnswerVotersQueryInfer, GetAnswerVotersResponseInfer } from "../pipes/polls";
+import { GetAnswerVotersQuery } from "../pipes/polls";
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/poll#get-answer-voters}

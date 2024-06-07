@@ -11,7 +11,7 @@ import type {
 	ExecuteWebhookQueryInfer,
 	GetWebhookMessageQueryInfer,
 	ModifyWebhookJSONInfer,
-} from "../libs/webhooks";
+} from "../pipes/webhooks";
 import {
 	CreateWebhookJSON,
 	DeleteWebhookMessageQuery,
@@ -21,7 +21,7 @@ import {
 	ExecuteWebhookQuery,
 	GetWebhookMessageQuery,
 	ModifyWebhookJSON,
-} from "../libs/webhooks";
+} from "../pipes/webhooks";
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/webhook#create-webhook}

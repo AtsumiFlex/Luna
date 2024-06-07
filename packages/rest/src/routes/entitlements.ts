@@ -1,13 +1,7 @@
 import type { EntitlementStructureInfer, SnowflakeInfer } from "@lunajs/core";
 import type { RestMakeRequestOptions } from "../globals/rest";
-import type {
-	CreateTestEntitlementJSONInfer,
-	ListEntitlementsQueryInfer,
-} from "../libs/entitlements";
-import {
-	CreateTestEntitlementJSON,
-	ListEntitlementsQuery,
-} from "../libs/entitlements";
+import type { CreateTestEntitlementJSONInfer, ListEntitlementsQueryInfer } from "../pipes/entitlements";
+import { CreateTestEntitlementJSON, ListEntitlementsQuery } from "../pipes/entitlements";
 
 /**
  * @see {@link https://discord.com/developers/docs/monetization/entitlements#list-entitlements}

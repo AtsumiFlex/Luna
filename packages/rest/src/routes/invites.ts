@@ -1,7 +1,7 @@
 import type { InviteStructureInfer } from "@lunajs/core";
 import type { RestMakeRequestOptions } from "../globals/rest";
-import type { GetInviteQueryInfer } from "../libs/invites";
-import { GetInviteQuery } from "../libs/invites";
+import type { GetInviteQueryInfer } from "../pipes/invites";
+import { GetInviteQuery } from "../pipes/invites";
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/invite#get-invite}

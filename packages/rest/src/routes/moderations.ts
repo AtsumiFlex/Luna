@@ -1,13 +1,7 @@
 import type { AutoModerationRuleStructureInfer, SnowflakeInfer } from "@lunajs/core";
 import type { RestMakeRequestOptions } from "../globals/rest";
-import type {
-	CreateAutoModerationRuleJSONInfer,
-	ModifyAutoModerationRuleJSONInfer,
-} from "../libs/moderations";
-import {
-	CreateAutoModerationRuleJSON,
-	ModifyAutoModerationRuleJSON,
-} from "../libs/moderations";
+import type { CreateAutoModerationRuleJSONInfer, ModifyAutoModerationRuleJSONInfer } from "../pipes/moderations";
+import { CreateAutoModerationRuleJSON, ModifyAutoModerationRuleJSON } from "../pipes/moderations";
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/auto-moderation#list-auto-moderation-rules-for-guild}

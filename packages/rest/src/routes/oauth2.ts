@@ -1,6 +1,6 @@
 import type { ApplicationStructureInfer } from "@lunajs/core";
 import type { RestMakeRequestOptions } from "../globals/rest";
-import type { GetCurrentAuthorizationInformationResponseStructureInfer } from "../libs/oauth2";
+import type { GetCurrentAuthorizationInformationResponseStructureInfer } from "../pipes/oauth2";
 
 /**
  * @see {@link https://discord.com/developers/docs/topics/oauth2#get-current-bot-application-information}

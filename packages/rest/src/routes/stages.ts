@@ -1,14 +1,8 @@
 import type { SnowflakeInfer, StageInstanceStructureInfer } from "@lunajs/core";
 import { Snowflake } from "@lunajs/core";
 import type { RestMakeRequestOptions } from "../globals/rest";
-import type {
-	CreateStageInstanceJSONInfer,
-	ModifyStageInstanceJSONInfer,
-} from "../libs/stages";
-import {
-	CreateStageInstanceJSON,
-	ModifyStageInstanceJSON,
-} from "../libs/stages";
+import type { CreateStageInstanceJSONInfer, ModifyStageInstanceJSONInfer } from "../pipes/stages";
+import { CreateStageInstanceJSON, ModifyStageInstanceJSON } from "../pipes/stages";
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/stage-instance#create-stage-instance}

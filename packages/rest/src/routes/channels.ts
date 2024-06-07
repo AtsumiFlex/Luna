@@ -34,7 +34,7 @@ import type {
 	StartThreadFromMessageJSONInfer,
 	StartThreadInForumOrMediaChannelJSONFormInfer,
 	StartThreadWithoutMessageJSONInfer,
-} from "../libs/channels";
+} from "../pipes/channels";
 import {
 	BulkDeleteMessagesJSON,
 	CreateChannelInviteJSON,
@@ -50,7 +50,7 @@ import {
 	ListThreadMembersQuery,
 	StartThreadFromMessageJSON,
 	StartThreadWithoutMessageJSON,
-} from "../libs/channels";
+} from "../pipes/channels";
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/channel#get-channel}

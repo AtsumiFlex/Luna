@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@lunajs/eslint-config": "workspace:*",
-    "@lunajs/ts-config": "workspace:*"
+    "@lunajs/ts-config": "workspace:*",
+    "@types/node": "^20.14.2"
   }
 }

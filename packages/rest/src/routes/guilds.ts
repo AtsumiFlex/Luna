@@ -57,7 +57,7 @@ import type {
 	ModifyGuildWelcomeScreenJSONInfer,
 	ModifyUserVoiceStateJSONInfer,
 	SearchGuildMembersQueryInfer,
-} from "../libs/guilds";
+} from "../pipes/guilds";
 import {
 	AddGuildMemberJSON,
 	BeginGuildPruneJSON,
@@ -92,7 +92,7 @@ import {
 	ModifyGuildWelcomeScreenJSON,
 	ModifyUserVoiceStateJSON,
 	SearchGuildMembersQuery,
-} from "../libs/guilds";
+} from "../pipes/guilds";
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/guild-template#get-guild-template}

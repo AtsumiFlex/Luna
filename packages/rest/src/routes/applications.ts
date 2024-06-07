@@ -4,8 +4,8 @@ import type {
 	SnowflakeInfer,
 } from "@lunajs/core";
 import type { RestMakeRequestOptions } from "../globals/rest";
-import type { EditCurrentApplicationJSONInfer } from "../libs/applications";
-import { EditCurrentApplicationJSON } from "../libs/applications";
+import type { EditCurrentApplicationJSONInfer } from "../pipes/applications";
+import { EditCurrentApplicationJSON } from "../pipes/applications";
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/application-role-connection-metadata#get-application-role-connection-metadata-records}

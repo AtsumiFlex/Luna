@@ -1,14 +1,8 @@
 import type { EmojiStructureInfer, SnowflakeInfer } from "@lunajs/core";
 import { Snowflake } from "@lunajs/core";
 import type { RestMakeRequestOptions } from "../globals/rest";
-import type {
-	CreateGuildEmojiJSONInfer,
-	ModifyGuildEmojiJSONInfer,
-} from "../libs/emojis";
-import {
-	CreateGuildEmojiJSON,
-	ModifyGuildEmojiJSON,
-} from "../libs/emojis";
+import type { CreateGuildEmojiJSONInfer, ModifyGuildEmojiJSONInfer } from "../pipes/emojis";
+import { CreateGuildEmojiJSON, ModifyGuildEmojiJSON } from "../pipes/emojis";
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/emoji#list-guild-emojis}

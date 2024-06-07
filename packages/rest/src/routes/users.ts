@@ -14,14 +14,14 @@ import type {
 	GetCurrentUserGuildsQueryInfer,
 	ModifyCurrentUserJSONInfer,
 	UpdateCurrentUserApplicationRoleConnectionJSONInfer,
-} from "../libs/users";
+} from "../pipes/users";
 import {
 	CreateDMJSON,
 	CreateGroupDMJSON,
 	GetCurrentUserGuildsQuery,
 	ModifyCurrentUserJSON,
 	UpdateCurrentUserApplicationRoleConnectionJSON,
-} from "../libs/users";
+} from "../pipes/users";
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/user#get-current-user}

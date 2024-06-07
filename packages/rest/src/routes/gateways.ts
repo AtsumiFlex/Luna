@@ -1,5 +1,5 @@
 import type { RestMakeRequestOptions } from "../globals/rest";
-import type { GetGatewayBotResponseSchemaInfer } from "../libs/gateways";
+import type { GetGatewayBotResponseSchemaInfer } from "../pipes/gateways";
 
 /**
  * @see {@link https://discord.com/developers/docs/topics/gateway#get-gateway}

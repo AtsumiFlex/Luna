@@ -1,30 +1,31 @@
+/**
+ * TODO: Create TSDoc for files in the following directories:
+ * - ./globals/*
+ * - ./pipes/*
+ * - ./routes/*
+ */
+
 // ./globals
 export * from "./globals/rest";
 
-// ./libs/*
-/**
- * TODO: Faire les TSDoc pour les libs
- */
-export * from "./libs/applications";
-export * from "./libs/audits";
-export * from "./libs/channels";
-export * from "./libs/emojis";
-export * from "./libs/entitlements";
-export * from "./libs/gateways";
-export * from "./libs/guilds";
-export * from "./libs/interactions";
-export * from "./libs/invites";
-export * from "./libs/oauth2";
-export * from "./libs/polls";
-export * from "./libs/stages";
-export * from "./libs/stickers";
-export * from "./libs/users";
-export * from "./libs/webhooks";
+// ./pipes/*
+export * from "./pipes/applications";
+export * from "./pipes/audits";
+export * from "./pipes/channels";
+export * from "./pipes/emojis";
+export * from "./pipes/entitlements";
+export * from "./pipes/gateways";
+export * from "./pipes/guilds";
+export * from "./pipes/interactions";
+export * from "./pipes/invites";
+export * from "./pipes/oauth2";
+export * from "./pipes/polls";
+export * from "./pipes/stages";
+export * from "./pipes/stickers";
+export * from "./pipes/users";
+export * from "./pipes/webhooks";
 
 // ./routes/*
-/**
- * TODO: Faire les TSDoc pour les routes
- */
 export * from "./routes/applications";
 export * from "./routes/audits";
 export * from "./routes/channels";

@@ -1,7 +1,11 @@
-// ./events/*
 /**
- * TODO: Faire les TSDoc pour les events
+ * TODO: Create TSDoc for files in the following directories:
+ * - ./events/*
+ * - ./globals/*
+ * - ./other/*
  */
+
+// ./events/*
 export * from "./events/channels";
 export * from "./events/guilds";
 export * from "./events/hello";
@@ -16,10 +20,17 @@ export * from "./events/voices";
 export * from "./events/webhooks";
 
 // ./globals/*
-/**
- * TODO: Faire les TSDoc pour les globals
- */
+export * from "./globals/events";
 export * from "./globals/gateway";
 export * from "./globals/intents";
 export * from "./globals/shards";
 export * from "./globals/types";
+
+// ./other/*
+export * from "./other/connections";
+export * from "./other/identify";
+export * from "./other/members";
+export * from "./other/payload";
+export * from "./other/presences";
+export * from "./other/resume";
+export * from "./other/states";

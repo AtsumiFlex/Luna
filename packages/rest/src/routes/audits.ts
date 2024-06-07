@@ -1,8 +1,8 @@
 import type { AuditLogStructureInfer, SnowflakeInfer } from "@lunajs/core";
 import { Snowflake } from "@lunajs/core";
 import type { RestMakeRequestOptions } from "../globals/rest";
-import type { GetGuildAuditLogQueryInfer } from "../libs/audits";
-import { GetGuildAuditLogQuery } from "../libs/audits";
+import type { GetGuildAuditLogQueryInfer } from "../pipes/audits";
+import { GetGuildAuditLogQuery } from "../pipes/audits";
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/audit-log#get-guild-audit-log}
