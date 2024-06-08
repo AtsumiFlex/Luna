@@ -1,8 +1,23 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@lunajs/ws",
+  "version": "1.0.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "license": "AGPL-3.0-only",
+  "readme": "README.md",
+  "description": "WebSocket module for Luna.js",
+  "author": {
+    "name": "AtsumiFlex",
+    "url": "https://github.com/AtsumiFlex"
+  },
+  "bugs": {
+    "url": "https://github.com/AtsumiFlex/luna.js/issues"
+  },
+  "repository": {
+    "url": "https://github.com/AtsumiFlex/luna.js.git",
+    "type": "git"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint --ext .ts . --fix",
