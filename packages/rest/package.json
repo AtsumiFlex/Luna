@@ -18,6 +18,9 @@
     "url": "https://github.com/AtsumiFlex/luna.js.git",
     "type": "git"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint --ext .ts . --fix"
