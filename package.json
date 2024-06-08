@@ -1,7 +1,21 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@lunajs/monorepo",
+  "license": "AGPL-3.0-only",
+  "readme": "README.md",
   "packageManager": "pnpm@9.2.0",
+  "description": "Welcome to Luna, a next-generation Discord bot built with the latest technologies.",
+  "author": {
+    "name": "AtsumiFlex",
+    "url": "https://github.com/AtsumiFlex"
+  },
+  "bugs": {
+    "url": "https://github.com/AtsumiFlex/luna.js/issues"
+  },
+  "repository": {
+    "url": "https://github.com/AtsumiFlex/luna.js.git",
+    "type": "git"
+  },
   "private": true,
   "scripts": {
     "build": "turbo run build",
