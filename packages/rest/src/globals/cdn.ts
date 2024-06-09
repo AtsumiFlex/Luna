@@ -71,8 +71,8 @@ export class CDN {
 		return url.toString();
 	}
 
-	public static defaultUserAvatar(userId: IntegerInfer) {
-		const hash = (BigInt(userId) >> 22n) % 6n;
+	public static defaultUserAvatar(userId: SnowflakeInfer) {
+		const hash = userId === "0" ? (BigInt(userId) >> 22n) % 6n : BigInt(userId) % 5n;
 		return new URL(`/embed/avatars/${hash}.png`, this.baseURL).toString();
 	}
 
