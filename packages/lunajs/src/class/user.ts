@@ -76,14 +76,14 @@ export class Connection {
 export const ConnectionSchema = z.instanceof(Connection);
 
 export class AvatarDecorationData {
-	public readonly asset?: AvatarDecorationDataStructureInfer["asset"];
+	public readonly asset: AvatarDecorationDataStructureInfer["asset"];
 
-	public readonly skuId?: AvatarDecorationDataStructureInfer["sku_id"];
+	public readonly skuId: AvatarDecorationDataStructureInfer["sku_id"];
 
-	public constructor(public data?: AvatarDecorationDataStructureInfer) {
+	public constructor(public data: AvatarDecorationDataStructureInfer) {
 		AvatarDecorationDataStructure.parse(data);
-		this.asset = data?.asset;
-		this.skuId = data?.sku_id;
+		this.asset = data.asset;
+		this.skuId = data.sku_id;
 	}
 }
 
