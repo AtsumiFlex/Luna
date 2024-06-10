@@ -31,7 +31,7 @@
     "lint": "eslint --ext .ts . --fix"
   },
   "dependencies": {
-    "tslib": "^2.6.2",
+    "tslib": "^2.6.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {
