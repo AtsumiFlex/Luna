@@ -30,7 +30,7 @@
     "@lunajs/core": "workspace:*",
     "@lunajs/rest": "workspace:*",
     "eventemitter3": "^5.0.1",
-    "tslib": "^2.6.2",
+    "tslib": "^2.6.3",
     "ws": "^8.17.0",
     "zod": "^3.23.8"
   },
