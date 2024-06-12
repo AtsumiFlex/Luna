@@ -8,6 +8,7 @@ import { request } from "undici";
 export type RestMakeRequestOptions<T> = Omit<Dispatcher.DispatchOptions, "headers"> & {
 	headers?: Partial<DiscordHeadersInfer>;
 	path: string;
+	type?: T;
 };
 
 export type RestOptions = {

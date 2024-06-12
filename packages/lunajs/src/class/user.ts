@@ -5,18 +5,9 @@ import type {
 	IntegerInfer,
 	UserStructureInfer,
 } from "@lunajs/core";
-import {
-	ApplicationRoleConnectionStructure,
-	AvatarDecorationDataStructure,
-	ConnectionStructure,
-	formatUser,
-	ImageFormats,
-	snowflakeToTimestamp,
-	UserStructure,
-} from "@lunajs/core";
+import { ApplicationRoleConnectionStructure, formatUser, ImageFormats, snowflakeToTimestamp } from "@lunajs/core";
 import { z } from "zod";
 import type { Client } from "./client";
-import { ClientSchema } from "./client";
 
 export class ApplicationRoleConnection {
 	public readonly name: ApplicationRoleConnectionStructureInfer["platform_name"];
@@ -58,7 +49,6 @@ export class Connection {
 	public readonly visibility: ConnectionStructureInfer["visibility"];
 
 	public constructor(public data: ConnectionStructureInfer) {
-		ConnectionStructure.parse(data);
 		this.id = data.id;
 		this.name = data.name;
 		this.type = data.type;
@@ -81,7 +71,6 @@ export class AvatarDecorationData {
 	public readonly skuId: AvatarDecorationDataStructureInfer["sku_id"];
 
 	public constructor(public data: AvatarDecorationDataStructureInfer) {
-		AvatarDecorationDataStructure.parse(data);
 		this.asset = data.asset;
 		this.skuId = data.sku_id;
 	}
@@ -125,8 +114,6 @@ export class User {
 	public readonly avatarDecorationData: AvatarDecorationData;
 
 	public constructor(private readonly client: Client, public data: UserStructureInfer) {
-		ClientSchema.parse(client);
-		UserStructure.parse(data);
 		this.id = data.id;
 		this.username = data.username;
 		this.discriminator = data.discriminator;
