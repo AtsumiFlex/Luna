@@ -51,15 +51,15 @@ export const GuildOnboardingPromptOptionStructure = z.object({
 	 */
 	role_ids: z.array(Snowflake),
 	/**
-	 * Emoji of the option
+	 * Emojis of the option
 	 */
 	emoji: EmojiStructure.optional(),
 	/**
-	 * Emoji ID of the option (see below)
+	 * Emojis ID of the option (see below)
 	 */
 	emoji_id: Snowflake.optional(),
 	/**
-	 * Emoji name of the option (see below)
+	 * Emojis name of the option (see below)
 	 */
 	emoji_name: z.string().optional(),
 	/**

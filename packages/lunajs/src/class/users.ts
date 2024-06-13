@@ -7,7 +7,7 @@ import type {
 } from "@lunajs/core";
 import { ApplicationRoleConnectionStructure, formatUser, ImageFormats, snowflakeToTimestamp } from "@lunajs/core";
 import { z } from "zod";
-import type { Client } from "./client";
+import type { Client } from "./clients";
 
 export class ApplicationRoleConnection {
 	public readonly name: ApplicationRoleConnectionStructureInfer["platform_name"];
@@ -78,7 +78,7 @@ export class AvatarDecorationData {
 
 export const AvatarDecorationDataSchema = z.instanceof(AvatarDecorationData);
 
-export class User {
+export class Users {
 	public readonly id: UserStructureInfer["id"];
 
 	public readonly username: UserStructureInfer["username"];
@@ -163,7 +163,7 @@ export class User {
 	}
 }
 
-export const UserSchema = z.instanceof(User);
+export const UserSchema = z.instanceof(Users);
 
 export {
 	ConnectionVisibilityTypes,

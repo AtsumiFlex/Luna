@@ -449,7 +449,7 @@ export const ApplicationStructure = z.object({
 	 * If the app belongs to a team, this will be a list of the members of that team.
 	 *
 	 * @example
-	 * const app = { team: { id: "123456789012345678", name: "My Team", members: [] } };
+	 * const app = { team: { id: "123456789012345678", name: "My Teams", members: [] } };
 	 */
 	team: TeamStructure.optional(),
 	/**
@@ -570,7 +570,7 @@ export const ApplicationStructure = z.object({
  *   owner: { id: "123456789012345678", username: "AppOwner" },
  *   summary: null,
  *   verify_key: "abcdef1234567890",
- *   team: { id: "123456789012345678", name: "My Team", members: [] },
+ *   team: { id: "123456789012345678", name: "My Teams", members: [] },
  *   guild_id: "123456789012345678",
  *   guild: {},
  *   primary_sku_id: "123456789012345678",

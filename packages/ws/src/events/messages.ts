@@ -19,7 +19,7 @@ export const MessageReactionRemoveEmojiFields = z.object({
 	 */
 	message_id: Snowflake,
 	/**
-	 * Emoji that was removed
+	 * Emojis that was removed
 	 */
 	emoji: EmojiStructure.partial(),
 });
@@ -67,7 +67,7 @@ export const MessageReactionRemoveFields = z.object({
 	 */
 	guild_id: Snowflake.optional(),
 	/**
-	 * Emoji that was removed
+	 * Emojis that was removed
 	 */
 	emoji: EmojiStructure.partial(),
 	/**
@@ -107,7 +107,7 @@ export const MessageReactionAddFields = z.object({
 	 */
 	member: GuildMemberStructure.optional(),
 	/**
-	 * Emoji that was added
+	 * Emojis that was added
 	 */
 	emoji: EmojiStructure.partial(),
 	/**

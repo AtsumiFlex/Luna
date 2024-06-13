@@ -435,7 +435,7 @@ export const CreateGuildChannelJSON = z.object({
 	 */
 	default_auto_archive_duration: Integer.optional().nullable(),
 	/**
-	 * Emoji to show in the add reaction button on a thread in a GUILD_FORUM or a GUILD_MEDIA channel
+	 * Emojis to show in the add reaction button on a thread in a GUILD_FORUM or a GUILD_MEDIA channel
 	 */
 	default_reaction_emoji: DefaultReactionStructure.optional().nullable(),
 	/**

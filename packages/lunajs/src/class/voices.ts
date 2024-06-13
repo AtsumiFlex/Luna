@@ -1,7 +1,7 @@
 import type { VoiceRegionStructureInfer, VoiceStateStructureInfer } from "@lunajs/core";
 import { ListVoiceRegions } from "@lunajs/rest";
 import { z } from "zod";
-import type { Client } from "./client";
+import type { Client } from "./clients";
 
 export class VoiceRegion {
 	public readonly id: VoiceRegionStructureInfer["id"];

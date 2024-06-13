@@ -1,7 +1,7 @@
 import type { EmojiStructureInfer } from "@lunajs/core";
 import { z } from "zod";
-import type { Client } from "./client";
-import { User } from "./user";
+import type { Client } from "./clients";
+import { Users } from "./users";
 
 export class Emoji {
 	public readonly id: EmojiStructureInfer["id"];
@@ -10,7 +10,7 @@ export class Emoji {
 
 	public readonly roles: EmojiStructureInfer["roles"];
 
-	public readonly user?: User;
+	public readonly user?: Users;
 
 	public readonly requireColons: EmojiStructureInfer["require_colons"];
 
@@ -24,7 +24,7 @@ export class Emoji {
 		this.id = data.id;
 		this.name = data.name;
 		this.roles = data.roles;
-		this.user = new User(this.client, data.user);
+		this.user = new Users(this.client, data.user);
 		this.requireColons = data.require_colons;
 		this.managed = data.managed;
 		this.animated = data.animated;

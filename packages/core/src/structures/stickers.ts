@@ -87,7 +87,7 @@ export enum StickerTypes {
 export const StickerTypesEnum = z.nativeEnum(StickerTypes);
 
 /**
- * Schema for the Sticker Structure.
+ * Schema for the Stickers Structure.
  * Represents the structure of a sticker object.
  *
  * @see {@link https://discord.com/developers/docs/resources/sticker#sticker-object-sticker-types}
@@ -180,7 +180,7 @@ export const StickerStructure = z.object({
 });
 
 /**
- * Inferred type for the Sticker Structure schema.
+ * Inferred type for the Stickers Structure schema.
  *
  * @example
  * const sticker: StickerStructureInfer = {
@@ -201,7 +201,7 @@ export const StickerStructure = z.object({
 export type StickerStructureInfer = z.infer<typeof StickerStructure>;
 
 /**
- * Schema for the Sticker Item Structure.
+ * Schema for the Stickers Item Structure.
  * Represents the structure of a sticker item object.
  *
  * @see {@link https://discord.com/developers/docs/resources/sticker#sticker-item-object-sticker-item-structure}
@@ -231,7 +231,7 @@ export const StickerItemStructure = z.object({
 });
 
 /**
- * Inferred type for the Sticker Item Structure schema.
+ * Inferred type for the Stickers Item Structure schema.
  *
  * @example
  * const stickerItem: StickerItemStructureInfer = {
@@ -243,7 +243,7 @@ export const StickerItemStructure = z.object({
 export type StickerItemStructureInfer = z.infer<typeof StickerItemStructure>;
 
 /**
- * Schema for the Sticker Pack Structure.
+ * Schema for the Stickers Pack Structure.
  * Represents the structure of a sticker pack object.
  *
  * @see {@link https://discord.com/developers/docs/resources/sticker#sticker-pack-object-sticker-pack-structure}
@@ -301,7 +301,7 @@ export const StickerPackStructure = z.object({
 });
 
 /**
- * Inferred type for the Sticker Pack Structure schema.
+ * Inferred type for the Stickers Pack Structure schema.
  *
  * @example
  * const stickerPack: StickerPackStructureInfer = {

@@ -3,7 +3,7 @@ import { Snowflake } from "../globals/formats";
 import { UserStructure } from "./users";
 
 /**
- * Schema for the Emoji Structure.
+ * Schema for the Emojis Structure.
  * Represents the structure of an emoji object.
  *
  * @see {@link https://discord.com/developers/docs/resources/emoji#emoji-object-emoji-structure}
@@ -68,7 +68,7 @@ export const EmojiStructure = z.object({
 });
 
 /**
- * Inferred type for the Emoji Structure schema.
+ * Inferred type for the Emojis Structure schema.
  *
  * @example
  * const emoji: EmojiStructureInfer = {

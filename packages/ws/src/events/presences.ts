@@ -209,7 +209,7 @@ export const ActivityStructure = z.object({
 	 */
 	state: z.string().optional().nullable(),
 	/**
-	 * Emoji used for a custom status
+	 * Emojis used for a custom status
 	 */
 	emoji: ActivityEmoji.optional().nullable(),
 	/**

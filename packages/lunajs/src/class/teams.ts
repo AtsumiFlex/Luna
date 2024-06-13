@@ -1,21 +1,21 @@
 import type { TeamMemberStructureInfer, TeamStructureInfer } from "@lunajs/core";
 import { z } from "zod";
-import type { Client } from "./client";
-import { User } from "./user";
+import type { Client } from "./clients";
+import { Users } from "./users";
 
 export class TeamMember {
 	public readonly membershipState: TeamMemberStructureInfer["membership_state"];
 
 	public readonly teamId: TeamMemberStructureInfer["team_id"];
 
-	public readonly user?: User;
+	public readonly user?: Users;
 
 	public readonly role: TeamMemberStructureInfer["role"];
 
 	public constructor(private readonly client: Client, public data: TeamMemberStructureInfer) {
 		this.membershipState = data.membership_state;
 		this.teamId = data.team_id;
-		this.user = new User(this.client, data.user);
+		this.user = new Users(this.client, data.user);
 		this.role = data.role;
 	}
 }

@@ -1033,11 +1033,11 @@ export enum JSONErrorCodes {
 	 */
 	UploadedLottiesCannotContainRasterizedImagesSuchAsPNGOrJPEG = 170_002,
 	/**
-	 * Sticker maximum framerate exceeded
+	 * Stickers maximum framerate exceeded
 	 */
 	StickerMaximumFramerateExceeded = 170_003,
 	/**
-	 * Sticker frame count exceeds maximum of 1000 frames
+	 * Stickers frame count exceeds maximum of 1000 frames
 	 */
 	StickerFrameCountExceedsMaximumOf1000Frames = 170_004,
 	/**
@@ -1045,11 +1045,11 @@ export enum JSONErrorCodes {
 	 */
 	LottieAnimationMaximumDimensionsExceeded = 170_005,
 	/**
-	 * Sticker frame rate is either too small or too large
+	 * Stickers frame rate is either too small or too large
 	 */
 	StickerFrameRateIsEitherTooSmallOrTooLarge = 170_006,
 	/**
-	 * Sticker animation duration exceeds maximum of 5 seconds
+	 * Stickers animation duration exceeds maximum of 5 seconds
 	 */
 	StickerAnimationDurationExceedsMaximumOf5Seconds = 170_007,
 	/**

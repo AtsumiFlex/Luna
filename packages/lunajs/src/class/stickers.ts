@@ -1,7 +1,7 @@
 import type { StickerItemStructureInfer, StickerPackStructureInfer, StickerStructureInfer } from "@lunajs/core";
 import { z } from "zod";
-import type { Client } from "./client";
-import { User } from "./user";
+import type { Client } from "./clients";
+import { Users } from "./users";
 
 export class Sticker {
 	public readonly id: StickerStructureInfer["id"];
@@ -24,7 +24,7 @@ export class Sticker {
 
 	public readonly guildId: StickerStructureInfer["guild_id"];
 
-	public readonly user?: User;
+	public readonly user?: Users;
 
 	public readonly sortValue: StickerStructureInfer["sort_value"];
 
@@ -39,7 +39,7 @@ export class Sticker {
 		this.formatType = data.format_type;
 		this.available = data.available;
 		this.guildId = data.guild_id;
-		this.user = new User(this.client, data.user);
+		this.user = new Users(this.client, data.user);
 		this.sortValue = data.sort_value;
 	}
 }

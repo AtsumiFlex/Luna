@@ -37,7 +37,7 @@ export enum MembershipStates {
 export const MembershipStatesEnum = z.nativeEnum(MembershipStates);
 
 /**
- * Schema for the Team Member Structure.
+ * Schema for the Teams Member Structure.
  * Represents the structure of a team member object.
  *
  * @see {@link https://discord.com/developers/docs/topics/teams#data-models-team-member-object}
@@ -74,7 +74,7 @@ export const TeamMemberStructure = z.object({
 });
 
 /**
- * Inferred type for the Team Member Structure schema.
+ * Inferred type for the Teams Member Structure schema.
  *
  * @example
  * const member: TeamMemberStructureInfer = {
@@ -87,7 +87,7 @@ export const TeamMemberStructure = z.object({
 export type TeamMemberStructureInfer = z.infer<typeof TeamMemberStructure>;
 
 /**
- * Schema for the Team Structure.
+ * Schema for the Teams Structure.
  * Represents the structure of a team object.
  *
  * @see {@link https://discord.com/developers/docs/topics/teams#data-models-team-object}
@@ -118,7 +118,7 @@ export const TeamStructure = z.object({
 	 * Name of the team.
 	 *
 	 * @example
-	 * const team = { name: "Example Team" };
+	 * const team = { name: "Example Teams" };
 	 */
 	name: z.string(),
 	/**
@@ -131,14 +131,14 @@ export const TeamStructure = z.object({
 });
 
 /**
- * Inferred type for the Team Structure schema.
+ * Inferred type for the Teams Structure schema.
  *
  * @example
  * const team: TeamStructureInfer = {
  *   icon: "icon_hash",
  *   id: "123456789012345678",
  *   members: [{ membership_state: MembershipStates.Invited, team_id: "123456789012345678", user: { id: "123456789012345678", username: "example", discriminator: "1234" }, role: "Developer" }],
- *   name: "Example Team",
+ *   name: "Example Teams",
  *   owner_user_id: "123456789012345678"
  * };
  */
