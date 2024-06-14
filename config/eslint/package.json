@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@lunajs/eslint-config",
+  "private": true,
+  "files": [
+    "node.js"
+  ],
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-neon": "^0.1.62"
+  }
+}
