@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@lunajs/core",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint . --ext .ts"
+  },
+  "dependencies": {
+    "tslib": "^2.6.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@lunajs/eslint-config": "workspace:*",
+    "@lunajs/ts-config": "workspace:*"
+  }
+}

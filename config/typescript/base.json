@@ -4,9 +4,6 @@
   "compilerOptions": {
     "incremental": true,
     "composite": true,
-    "tsBuildInfoFile": "./dist/.tsbuildinfo",
-    "rootDir": "./src",
-    "outDir": "./dist",
     "target": "ESNext",
     "lib": [
       "ESNext",

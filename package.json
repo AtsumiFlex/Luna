@@ -5,9 +5,12 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "husky": "^9.0.11",
     "turbo": "latest",
     "typescript": "^5.4.5"
   },
