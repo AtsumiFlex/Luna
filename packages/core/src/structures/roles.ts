@@ -92,7 +92,7 @@ export const RoleStructure = z.object({
 	tags: RoleTagsStructure.optional(),
 	/**
 	 * Role flags combined as a bitfield
-	 * TODO: This should be a bigint, but it's not clear how to represent that in Zod
+	 * REMARK: This should be a bigint, but it's not clear how to represent that in Zod
 	 */
 	flags: z.union([RoleFlagsEnum, z.bigint()]),
 });

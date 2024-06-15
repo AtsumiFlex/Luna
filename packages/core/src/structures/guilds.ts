@@ -2,6 +2,7 @@ import { z } from "zod";
 import { Integer, Snowflake } from "../globals/formats";
 import { LocalesEnum } from "../globals/locales";
 import { Oauth2ScopesEnum } from "../libs/oauth2";
+import { ChannelStructure } from "./channels";
 import { EmojiStructure } from "./emojis";
 import { RoleStructure } from "./roles";
 import { StickerStructure } from "./stickers";
@@ -420,9 +421,9 @@ export const GuildWidgetStructure = z.object({
 	 */
 	instant_invite: z.string().nullable(),
 	/**
-	 * TODO: Voice and stage channels which are accessible by @everyone
+	 * Voice and stage channels which are accessible by @everyone
 	 */
-	channels: z.array(z.unknown()),
+	channels: z.array(ChannelStructure),
 	/**
 	 * Special widget user objects that includes users presence (Limit 100)
 	 * TODO: User presence is not documented

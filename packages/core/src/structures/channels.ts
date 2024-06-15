@@ -6,6 +6,17 @@ import type { ApplicationIntegrationTypes, ApplicationStructureInfer } from "./a
 import { ApplicationIntegrationTypesEnum, ApplicationStructure } from "./applications";
 import { EmojiStructure } from "./emojis";
 import { GuildMemberStructure } from "./guilds";
+import type {
+	ComponentStructureInfer,
+	MessageInteractionStructureInfer,
+	ResolvedDataStructureInfer,
+} from "./interactions";
+import {
+	ComponentStructure,
+	InteractionTypesEnum,
+	MessageInteractionStructure,
+	ResolvedDataStructure,
+} from "./interactions";
 import type { PollStructureInfer } from "./polls";
 import { PollStructure } from "./polls";
 import type { RoleStructureInfer } from "./roles";
@@ -221,7 +232,7 @@ export const AttachmentStructure = z.object({
 	waveform: z.string().optional(),
 	/**
 	 * Attachment flags combined as a bitfield
-	 * TODO: This should be a bigint, but it's not clear how to represent that in Zod
+	 * Remark: This should be a bigint, but it's not clear how to represent that in Zod
 	 */
 	flags: z.union([z.bigint(), AttachmentFlagsEnum]).optional(),
 });
@@ -723,9 +734,9 @@ export const MessageInteractionMetadataStructure: z.ZodType<MessageInteractionMe
 	 */
 	id: Snowflake,
 	/**
-	 * TODO: Type of interaction
+	 * Type of interaction
 	 */
-	type: Integer,
+	type: InteractionTypesEnum,
 	/**
 	 * User who triggered the interaction
 	 */
@@ -1058,7 +1069,7 @@ export const ChannelStructure = z.object({
 	permissions: z.string().optional(),
 	/**
 	 * Channel flags combined as a bitfield
-	 * TODO: This should be a bigint, but it's not clear how to represent that in Zod
+	 * Remark: This should be a bigint, but it's not clear how to represent that in Zod
 	 */
 	flags: z.union([z.bigint(), ChannelFlagsEnum]).optional(),
 	/**
@@ -1094,47 +1105,47 @@ export const ChannelStructure = z.object({
 export type ChannelStructureInfer = z.infer<typeof ChannelStructure>;
 
 export type MessageStructureInfer = {
-	activity?: MessageActivityStructureInfer | null;
-	application?: ApplicationStructureInfer | null;
-	application_id?: SnowflakeInfer | null;
-	attachments: AttachmentStructureInfer[];
-	author: UserStructureInfer;
-	call?: MessageCallStructureInfer | null;
-	channel_id: SnowflakeInfer;
-	components?: unknown | null;
-	content: string;
-	edited_timestamp?: string | null;
-	embeds: EmbedStructureInfer[];
-	flags?: MessageFlags | bigint;
-	id: SnowflakeInfer;
-	interaction?: unknown | null;
-	interaction_metadata?: MessageInteractionMetadataStructureInfer | null;
-	mention_channels?: ChannelMentionStructureInfer[] | null;
-	mention_everyone: boolean;
-	mention_roles: RoleStructureInfer[];
-	mentions: UserStructureInfer[];
-	message_reference?: MessageReferenceStructureInfer | null;
-	nonce?: number | string | null;
-	pinned: boolean;
-	poll?: PollStructureInfer | null;
-	position?: number | null;
-	reactions?: ReactionStructureInfer[] | null;
-	referenced_message?: MessageStructureInfer | null;
-	resolved?: unknown | null;
-	role_subscription_data?: RoleSubscriptionDataStructureInfer | null;
-	sticker_items?: StickerItemStructureInfer | null;
-	stickers?: StickerStructureInfer | null;
-	thread?: ChannelStructureInfer | null;
-	timestamp: string;
-	tts: boolean;
-	type: number;
-	webhook_id?: SnowflakeInfer | null;
+	activity?: z.ZodType<MessageActivityStructureInfer>;
+	application?: z.ZodType<ApplicationStructureInfer | null>;
+	application_id?: z.ZodType<SnowflakeInfer | null>;
+	attachments: z.ZodType<AttachmentStructureInfer[]>;
+	author: z.ZodType<UserStructureInfer>;
+	call?: z.ZodType<MessageCallStructureInfer | null>;
+	channel_id: z.ZodType<SnowflakeInfer>;
+	components?: z.ZodType<ComponentStructureInfer | null>;
+	content: z.ZodType<string>;
+	edited_timestamp?: z.ZodType<string | null>;
+	embeds: z.ZodType<EmbedStructureInfer[]>;
+	flags?: z.ZodType<MessageFlags | bigint>;
+	id: z.ZodType<SnowflakeInfer>;
+	interaction?: z.ZodType<MessageInteractionStructureInfer | null>;
+	interaction_metadata?: z.ZodType<MessageInteractionMetadataStructureInfer | null>;
+	mention_channels?: z.ZodType<ChannelMentionStructureInfer[] | null>;
+	mention_everyone: z.ZodType<boolean>;
+	mention_roles: z.ZodType<RoleStructureInfer[]>;
+	mentions: z.ZodType<UserStructureInfer[]>;
+	message_reference?: z.ZodType<MessageReferenceStructureInfer | null>;
+	nonce?: z.ZodType<number | string | null>;
+	pinned: z.ZodType<boolean>;
+	poll?: z.ZodType<PollStructureInfer | null>;
+	position?: z.ZodType<number | null>;
+	reactions?: z.ZodType<ReactionStructureInfer[] | null>;
+	referenced_message?: z.ZodType<MessageStructureInfer | null>;
+	resolved?: z.ZodType<ResolvedDataStructureInfer | null>;
+	role_subscription_data?: z.ZodType<RoleSubscriptionDataStructureInfer | null>;
+	sticker_items?: z.ZodType<StickerItemStructureInfer | null>;
+	stickers?: z.ZodType<StickerStructureInfer | null>;
+	thread?: z.ZodType<ChannelStructureInfer | null>;
+	timestamp: z.ZodType<string>;
+	tts: z.ZodType<boolean>;
+	type: z.ZodType<number>;
+	webhook_id?: z.ZodType<SnowflakeInfer | null>;
 };
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/channel#message-object-message-structure}
  */
-export const MessageStructure: z.ZodType<MessageStructureInfer> = z.object({
+export const MessageStructure: z.ZodObject<MessageStructureInfer> = z.object({
 	/**
 	 * ID of the message
 	 */
@@ -1225,7 +1236,7 @@ export const MessageStructure: z.ZodType<MessageStructureInfer> = z.object({
 	message_reference: MessageReferenceStructure.optional(),
 	/**
 	 * Message flags combined as a bitfield
-	 * TODO: This should be a bigint, but it's not clear how to represent that in Zod
+	 * Remark: This should be a bigint, but it's not clear how to represent that in Zod
 	 */
 	flags: z.union([z.bigint(), MessageFlagsEnum]).optional(),
 	/**
@@ -1237,19 +1248,19 @@ export const MessageStructure: z.ZodType<MessageStructureInfer> = z.object({
 	 */
 	interaction_metadata: MessageInteractionMetadataStructure.optional(),
 	/**
-	 * TODO: Deprecated in favor of interaction_metadata; sent if the message is a response to an interaction
+	 * Deprecated in favor of interaction_metadata; sent if the message is a response to an interaction
 	 *
 	 * @deprecated
 	 */
-	interaction: z.unknown().optional(),
+	interaction: MessageInteractionStructure.optional(),
 	/**
 	 * The thread that was started from this message, includes thread member object
 	 */
 	thread: ChannelStructure.optional(),
 	/**
-	 * TODO: Sent if the message contains components like buttons, action rows, or other interactive components
+	 * Sent if the message contains components like buttons, action rows, or other interactive components
 	 */
-	components: z.unknown().optional(),
+	components: ComponentStructure.optional(),
 	/**
 	 * Sent if the message contains stickers
 	 */
@@ -1267,9 +1278,9 @@ export const MessageStructure: z.ZodType<MessageStructureInfer> = z.object({
 	 */
 	role_subscription_data: RoleSubscriptionDataStructure.optional(),
 	/**
-	 * TODO: Data for users, members, channels, and roles in the message's auto-populated select menus
+	 * Data for users, members, channels, and roles in the message's auto-populated select menus
 	 */
-	resolved: z.unknown().optional(),
+	resolved: ResolvedDataStructure.optional(),
 	/**
 	 * A poll!
 	 */

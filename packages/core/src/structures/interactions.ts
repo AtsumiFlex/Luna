@@ -353,26 +353,26 @@ export enum ApplicationCommandOptionTypes {
 export const ApplicationCommandOptionTypesEnum = z.nativeEnum(ApplicationCommandOptionTypes);
 
 export type ApplicationCommandOptionStructureInfer = {
-	autocomplete?: boolean;
-	channel_types?: ChannelTypes[];
-	choices?: ApplicationCommandOptionChoiceStructureInfer[];
-	description: string;
-	description_localizations?: Record<Locales, string>;
-	max_length?: IntegerInfer;
-	max_value?: IntegerInfer;
-	min_length?: IntegerInfer;
-	min_value?: IntegerInfer;
-	name: string;
-	name_localizations?: Record<Locales, string>;
-	options?: ApplicationCommandOptionStructureInfer[];
-	required?: boolean;
-	type: ApplicationCommandOptionTypes;
+	autocomplete?: z.ZodType<boolean>;
+	channel_types?: z.ZodType<ChannelTypes[]>;
+	choices?: z.ZodType<ApplicationCommandOptionChoiceStructureInfer[]>;
+	description: z.ZodType<string>;
+	description_localizations?: z.ZodType<Record<Locales, string>>;
+	max_length?: z.ZodType<IntegerInfer>;
+	max_value?: z.ZodType<IntegerInfer>;
+	min_length?: z.ZodType<IntegerInfer>;
+	min_value?: z.ZodType<IntegerInfer>;
+	name: z.ZodType<string>;
+	name_localizations?: z.ZodType<Record<Locales, string>>;
+	options?: z.ZodType<ApplicationCommandOptionStructureInfer[]>;
+	required?: z.ZodType<boolean>;
+	type: z.ZodType<ApplicationCommandOptionTypes>;
 };
 
 /**
  * @see {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-structure}
  */
-export const ApplicationCommandOptionStructure: z.ZodType<ApplicationCommandOptionStructureInfer> = z.object({
+export const ApplicationCommandOptionStructure: z.ZodObject<ApplicationCommandOptionStructureInfer> = z.object({
 	/**
 	 * Type of option
 	 */
@@ -452,6 +452,26 @@ export enum ApplicationCommandTypes {
 export const ApplicationCommandTypesEnum = z.nativeEnum(ApplicationCommandTypes);
 
 /**
+ * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-context-types}
+ */
+export enum InteractionContextTypes {
+	/**
+	 * Interaction can be used within servers
+	 */
+	Guild = 0,
+	/**
+	 * Interaction can be used within DMs with the app's bot user
+	 */
+	BotDM = 1,
+	/**
+	 * Interaction can be used within Group DMs and DMs other than the app's bot user
+	 */
+	PrivateChannel = 2,
+}
+
+export const InteractionContextTypesEnum = z.nativeEnum(InteractionContextTypes);
+
+/**
  * @see {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure}
  */
 export const ApplicationCommandStructure = z.object({
@@ -512,9 +532,9 @@ export const ApplicationCommandStructure = z.object({
 	 */
 	integration_types: z.array(ApplicationIntegrationTypesEnum).optional(),
 	/**
-	 * TODO: Interaction context(s) where the command can be used, only for globally-scoped commands. By default, all interaction context types included for new commands.
+	 * Interaction context(s) where the command can be used, only for globally-scoped commands. By default, all interaction context types included for new commands.
 	 */
-	contexts: z.array(z.number()).optional().nullable(),
+	contexts: z.array(InteractionContextTypesEnum).optional().nullable(),
 	/**
 	 * Autoincrementing version identifier updated during substantial record changes
 	 */
@@ -577,7 +597,7 @@ export const InteractionCallDataStructure = z.object({
 	allowed_mentions: AllowedMentionsStructure.optional(),
 	/**
 	 * The flags for the message
-	 * TODO: This is a bitfield, but we don't have a way to represent that in Zod
+	 * REMARK: This is a bitfield, but we don't have a way to represent that in Zod
 	 */
 	flags: z.union([Integer, MessageFlagsEnum]).optional(),
 	/**
@@ -726,9 +746,16 @@ export const ResolvedDataStructure = z.object({
 	 * Map of Snowflakes to partial member objects
 	 */
 	members: z.map(Snowflake, GuildMemberStructure.pick({
-		user: false,
-		deaf: false,
-		mute: false,
+		premium_since: true,
+		nick: true,
+		avatar: true,
+		avatar_decoration_data: true,
+		flags: true,
+		communication_disabled_until: true,
+		joined_at: true,
+		pending: true,
+		permissions: true,
+		roles: true,
 	})).optional(),
 	/**
 	 * Map of Snowflakes to role objects
@@ -832,26 +859,6 @@ export const ApplicationCommandInteractionDataStructure = z.object({
 });
 
 export type ApplicationCommandInteractionDataStructureInfer = z.infer<typeof ApplicationCommandInteractionDataStructure>;
-
-/**
- * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-context-types}
- */
-export enum InteractionContextTypes {
-	/**
-	 * Interaction can be used within servers
-	 */
-	Guild = 0,
-	/**
-	 * Interaction can be used within DMs with the app's bot user
-	 */
-	BotDM = 1,
-	/**
-	 * Interaction can be used within Group DMs and DMs other than the app's bot user
-	 */
-	PrivateChannel = 2,
-}
-
-export const InteractionContextTypesEnum = z.nativeEnum(InteractionContextTypes);
 
 /**
  * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-type}

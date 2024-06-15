@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { Integer, Snowflake } from "../globals/formats";
 import { LocalesEnum } from "../globals/locales";
+import { IntegrationStructure } from "./guilds";
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/user#application-role-connection-object-application-role-connection-structure}
@@ -16,9 +17,8 @@ export const ApplicationRoleConnectionStructure = z.object({
 	platform_username: z.string().max(100).optional(),
 	/**
 	 * Object mapping application role connection metadata keys to their string-ified value (max 100 characters) for the user on the platform a bot has connected
-	 * TODO: Add metadata object
 	 */
-	metadata: z.record(z.string()).optional(),
+	metadata: z.record(z.string(), z.string()).optional(),
 });
 
 export type ApplicationRoleConnectionStructureInfer = z.infer<typeof ApplicationRoleConnectionStructure>;
@@ -89,9 +89,9 @@ export const ConnectionStructure = z.object({
 	 */
 	revoked: z.boolean().optional(),
 	/**
-	 * TODO: An array of partial server integrations
+	 * An array of partial server integrations
 	 */
-	integrations: z.array(z.unknown()).optional(),
+	integrations: z.array(IntegrationStructure.partial()).optional(),
 	/**
 	 * Whether the connection is verified
 	 */

@@ -71,7 +71,7 @@ export const SkuStructure = z.object({
 	slug: z.string(),
 	/**
 	 * SKU flags combined as a bitfield
-	 * TODO: This should be a bigint, but it's not clear how to represent that in Zod
+	 * REMARK: This should be a bigint, but it's not clear how to represent that in Zod
 	 */
 	flags: z.union([z.bigint(), SkuFlagsEnum]),
 });
