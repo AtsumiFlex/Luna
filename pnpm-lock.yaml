@@ -30,24 +30,6 @@ importers:
         specifier: ^0.1.62
         version: 0.1.62(eslint@8.57.0)(svelte@3.59.2)(typescript@5.4.5)
 
-  config/jest:
-    devDependencies:
-      '@jest/types':
-        specifier: ^29.6.3
-        version: 29.6.3
-      '@types/jest':
-        specifier: ^29.5.12
-        version: 29.5.12
-      jest:
-        specifier: ^29.7.0
-        version: 29.7.0(@types/node@20.14.2)
-      ts-jest:
-        specifier: ^29.1.4
-        version: 29.1.4(@babel/core@7.24.7)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.7))(jest@29.7.0(@types/node@20.14.2))(typescript@5.4.5)
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
-
   config/typescript: {}
 
   packages/core:
@@ -65,15 +47,55 @@ importers:
       '@lunajs/eslint-config':
         specifier: workspace:*
         version: link:../../config/eslint
-      '@lunajs/jest-config':
-        specifier: workspace:*
-        version: link:../../config/jest
       '@lunajs/ts-config':
         specifier: workspace:*
         version: link:../../config/typescript
       '@types/jest':
         specifier: ^29.5.12
         version: 29.5.12
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@20.14.2)
+      ts-jest:
+        specifier: ^29.1.4
+        version: 29.1.4(@babel/core@7.24.7)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.7))(jest@29.7.0(@types/node@20.14.2))(typescript@5.4.5)
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
+
+  packages/ws:
+    dependencies:
+      '@lunajs/core':
+        specifier: workspace:*
+        version: link:../core
+      eventemitter3:
+        specifier: ^5.0.1
+        version: 5.0.1
+      tslib:
+        specifier: ^2.6.3
+        version: 2.6.3
+      ws:
+        specifier: ^8.17.0
+        version: 8.17.0
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@jest/types':
+        specifier: ^29.6.3
+        version: 29.6.3
+      '@lunajs/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint
+      '@lunajs/ts-config':
+        specifier: workspace:*
+        version: link:../../config/typescript
+      '@types/jest':
+        specifier: ^29.5.12
+        version: 29.5.12
+      '@types/ws':
+        specifier: ^8.5.10
+        version: 8.5.10
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.14.2)
@@ -558,6 +580,9 @@ packages:
 
   '@types/unist@3.0.2':
     resolution: {integrity: sha512-dqId9J8K/vGi5Zr7oo212BGii5m3q5Hxlkwy3WpYuKPklmBEvsbMYYyLxAQpSffdLl/gdW0XUpKWFvYmyoWCoQ==}
+
+  '@types/ws@8.5.10':
+    resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
 
   '@types/yargs-parser@21.0.3':
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
@@ -1426,6 +1451,9 @@ packages:
   esutils@2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
+
+  eventemitter3@5.0.1:
+    resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
 
   execa@5.1.1:
     resolution: {integrity: sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==}
@@ -3072,6 +3100,18 @@ packages:
     resolution: {integrity: sha512-7KxauUdBmSdWnmpaGFg+ppNjKF8uNLry8LyzjauQDOVONfFLNKrKvQOxZ/VuTIcS/gge/YNahf5RIIQWTSarlg==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
 
+  ws@8.17.0:
+    resolution: {integrity: sha512-uJq6108EgZMAl20KagGkzCKfMEjxmKvZHG7Tlq0Z6nOky7YF7aq4mOx6xK8TJ/i1LeK4Qus7INktacctDgY8Ow==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+
   xml-name-validator@4.0.0:
     resolution: {integrity: sha512-ICP2e+jsHvAj2E2lIHxa5tjXRlKDJo4IdvPvCXbXQGdzSfmSpNVyIKMvoZHjDY9DP0zV17iI85o90vRFXNccRw==}
     engines: {node: '>=12'}
@@ -3767,6 +3807,10 @@ snapshots:
   '@types/unist@2.0.10': {}
 
   '@types/unist@3.0.2': {}
+
+  '@types/ws@8.5.10':
+    dependencies:
+      '@types/node': 20.14.2
 
   '@types/yargs-parser@21.0.3': {}
 
@@ -4967,6 +5011,8 @@ snapshots:
       '@types/unist': 3.0.2
 
   esutils@2.0.3: {}
+
+  eventemitter3@5.0.1: {}
 
   execa@5.1.1:
     dependencies:
@@ -7086,6 +7132,8 @@ snapshots:
     dependencies:
       imurmurhash: 0.1.4
       signal-exit: 3.0.7
+
+  ws@8.17.0: {}
 
   xml-name-validator@4.0.0: {}
 

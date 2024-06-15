@@ -5,6 +5,8 @@ import { z } from "zod";
  */
 export const API_BASE_URL = "https://discord.com/api";
 
+export const WEBSOCKET_GATEWAY_URL = "wss://gateway.discord.gg/";
+
 /**
  * @see {@link https://discord.com/developers/docs/reference#image-formatting-image-base-url}
  */
