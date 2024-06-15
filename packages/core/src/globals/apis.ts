@@ -6,6 +6,13 @@ import { z } from "zod";
 export const API_BASE_URL = "https://discord.com/api";
 
 /**
+ * @see {@link https://discord.com/developers/docs/reference#image-formatting-image-base-url}
+ */
+export const CDN_URL = "https://cdn.discordapp.com";
+
+export const MEDIA_URL = "https://media.discordapp.net";
+
+/**
  * @see {@link https://discord.com/developers/docs/reference#api-versioning-api-versions}
  */
 export enum ApiVersions {
@@ -40,3 +47,13 @@ export enum ApiVersions {
 }
 
 export const ApiVersionsEnum = z.nativeEnum(ApiVersions);
+
+/**
+ * @see {@link https://discord.com/developers/docs/reference#authentication}
+ */
+export enum AuthTypes {
+	Bearer = "Bearer",
+	Bot = "Bot",
+}
+
+export const AuthTypesEnum = z.nativeEnum(AuthTypes);
