@@ -1152,7 +1152,7 @@ export const GuildTemplateStructure = z.object({
 		preferred_locale: true,
 		afk_timeout: true,
 		roles: true,
-		channels: true,
+		// channels: true,
 		afk_channel_id: true,
 		system_channel_id: true,
 		system_channel_flags: true,
