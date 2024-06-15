@@ -19,6 +19,7 @@ export * from "./libs/permissions";
 // ./structures/*
 export * from "./structures/emojis";
 export * from "./structures/entitlements";
+export * from "./structures/guilds";
 export * from "./structures/polls";
 export * from "./structures/rates";
 export * from "./structures/roles";
