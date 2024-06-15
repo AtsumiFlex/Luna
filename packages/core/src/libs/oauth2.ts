@@ -1,227 +1,214 @@
 import { z } from "zod";
+import { AuthTypesEnum } from "../globals/apis";
+import { Snowflake } from "../globals/formats";
 
 /**
- * Enumeration of OAuth2 URLs used in Discord's OAuth2 flow.
- * These URLs are used for various OAuth2-related endpoints.
- *
  * @see {@link https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-urls}
  */
-export enum OAuth2Urls {
-	/**
-	 * Base authorization URL.
-	 *
-	 * @example
-	 * const url = OAuth2Urls.Authorize;
-	 * console.log(url); // Output: https://discord.com/oauth2/authorize
-	 */
+export enum Oauth2Urls {
 	Authorize = "https://discord.com/oauth2/authorize",
-	/**
-	 * Token Revocation URL.
-	 *
-	 * @example
-	 * const url = OAuth2Urls.Revoke;
-	 * console.log(url); // Output: https://discord.com/api/oauth2/token/revoke
-	 */
 	Revoke = "https://discord.com/api/oauth2/token/revoke",
-	/**
-	 * Token URL.
-	 *
-	 * @example
-	 * const url = OAuth2Urls.Token;
-	 * console.log(url); // Output: https://discord.com/api/oauth2/token
-	 */
 	Token = "https://discord.com/api/oauth2/token",
 }
 
-/**
- * Zod schema for OAuth2 URLs enumeration.
- * This schema is used for validating {@link OAuth2Urls} values.
- *
- * @example
- * const isValidUrl = OAuth2UrlsEnum.safeParse(OAuth2Urls.Authorize).success;
- */
-export const OAuth2UrlsEnum = z.nativeEnum(OAuth2Urls);
+export const Oauth2UrlsEnum = z.nativeEnum(Oauth2Urls);
 
 /**
- * Enumeration of OAuth2 scopes used in Discord's OAuth2 flow.
- * These scopes define the level of access being requested by the application.
- *
  * @see {@link https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes}
  */
-export enum OAuth2Scopes {
+export enum Oauth2Scopes {
 	/**
-	 * Allows your app to fetch data from a user's "Now Playing/Recently Played" list.
+	 * Allows your app to fetch data from a user's "Now Playing/Recently Played" list — not currently available for apps
 	 */
 	ActivitiesRead = "activities.read",
 	/**
-	 * Allows your app to update a user's activity.
+	 * Allows your app to update a user's activity - not currently available for apps (NOT REQUIRED FOR GAMESDK ACTIVITY MANAGER)
 	 */
 	ActivitiesWrite = "activities.write",
 	/**
-	 * Allows your app to read build data for a user's applications.
+	 * Allows your app to read build data for a user's applications
 	 */
 	ApplicationsBuildsRead = "applications.builds.read",
 	/**
-	 * Allows your app to upload/update builds for a user's applications.
+	 * Allows your app to upload/update builds for a user's applications - requires Discord approval
 	 */
 	ApplicationsBuildsUpload = "applications.builds.upload",
 	/**
-	 * Allows your app to add commands to a guild.
+	 * Allows your app to add commands to a guild - included by default with the bot scope
 	 */
 	ApplicationsCommands = "applications.commands",
 	/**
-	 * Allows your app to update permissions for its commands in a guild a user has permissions to.
+	 * Allows your app to update permissions for its commands in a guild a user has permissions to
 	 */
 	ApplicationsCommandsPermissionsUpdate = "applications.commands.permissions.update",
 	/**
-	 * Allows your app to update its commands using a Bearer token.
+	 * Allows your app to update its commands using a Bearer token - client credentials grant only
 	 */
 	ApplicationsCommandsUpdate = "applications.commands.update",
 	/**
-	 * Allows your app to read entitlements for a user's applications.
+	 * Allows your app to read entitlements for a user's applications
 	 */
 	ApplicationsEntitlements = "applications.entitlements",
 	/**
-	 * Allows your app to read and update store data for a user's applications.
+	 * Allows your app to read and update store data (SKUs, store listings, achievements, etc.) for a user's applications
 	 */
 	ApplicationsStoreUpdate = "applications.store.update",
 	/**
-	 * Puts the bot in the user's selected guild by default.
+	 * For oauth2 bots, this puts the bot in the user's selected guild by default
 	 */
 	Bot = "bot",
 	/**
-	 * Allows /users/@me/connections to return linked third-party accounts.
+	 * Allows /users/@me/connections to return linked third-party accounts
 	 */
 	Connections = "connections",
 	/**
-	 * Enables /users/@me to return an email.
+	 * Allows your app to see information about the user's DMs and group DMs - requires Discord approval
+	 */
+	DmChannelsRead = "dm_channels.read",
+	/**
+	 * Enables /users/@me to return an email
 	 */
 	Email = "email",
 	/**
-	 * Allows your app to join users to a group dm.
+	 * Allows your app to join users to a group dm
 	 */
 	GdmJoin = "gdm.join",
 	/**
-	 * Allows /users/@me/guilds to return basic information about all of a user's guilds.
+	 * Allows /users/@me/guilds to return basic information about all of a user's guilds
 	 */
 	Guilds = "guilds",
 	/**
-	 * Allows /guilds/{guild.id}/members/{user.id} to be used for joining users to a guild.
+	 * Allows /guilds/{guild.id}/members/{user.id} to be used for joining users to a guild
 	 */
 	GuildsJoin = "guilds.join",
 	/**
-	 * Allows /users/@me/guilds/{guild.id}/member to return a user's member information in a guild.
+	 * Allows /users/@me/guilds/{guild.id}/member to return a user's member information in a guild
 	 */
 	GuildsMembersRead = "guilds.members.read",
 	/**
-	 * Allows /users/@me without email.
+	 * Allows /users/@me without email
 	 */
 	Identify = "identify",
 	/**
-	 * Allows you to read messages from all client channels.
+	 * For local rpc server api access, this allows you to read messages from all client channels (otherwise restricted to channels/guilds your app creates)
 	 */
 	MessagesRead = "messages.read",
 	/**
-	 * Allows your app to know a user's friends and implicit relationships.
+	 * Allows your app to know a user's friends and implicit relationships - requires Discord approval
 	 */
 	RelationshipsRead = "relationships.read",
 	/**
-	 * Allows your app to update a user's connection and metadata for the app.
+	 * Allows your app to update a user's connection and metadata for the app
 	 */
 	RoleConnectionsWrite = "role_connections.write",
 	/**
-	 * Allows you to control a user's local Discord client.
+	 * For local rpc server access, this allows you to control a user's local Discord client - requires Discord approval
 	 */
 	Rpc = "rpc",
 	/**
-	 * Allows you to update a user's activity.
+	 * For local rpc server access, this allows you to update a user's activity - requires Discord approval
 	 */
 	RpcActivitiesWrite = "rpc.activities.write",
 	/**
-	 * Allows you to receive notifications pushed out to the user.
+	 * For local rpc server access, this allows you to receive notifications pushed out to the user - requires Discord approval
 	 */
 	RpcNotificationsRead = "rpc.notifications.read",
 	/**
-	 * Allows you to read a user's voice settings and listen for voice events.
+	 * For local rpc server access, this allows you to read a user's voice settings and listen for voice events - requires Discord approval
 	 */
 	RpcVoiceRead = "rpc.voice.read",
 	/**
-	 * Allows you to update a user's voice settings.
+	 * For local rpc server access, this allows you to update a user's voice settings - requires Discord approval
 	 */
 	RpcVoiceWrite = "rpc.voice.write",
 	/**
-	 * Allows your app to connect to voice on user's behalf and see all the voice members.
+	 * Allows your app to connect to voice on user's behalf and see all the voice members - requires Discord approval
 	 */
 	Voice = "voice",
 	/**
-	 * Generates a webhook that is returned in the oauth token response for authorization code grants.
+	 * This generates a webhook that is returned in the oauth token response for authorization code grants
 	 */
 	WebhookIncoming = "webhook.incoming",
 }
 
-/**
- * Zod schema for OAuth2 scopes enumeration.
- * This schema is used for validating {@link OAuth2Scopes} values.
- *
- * @example
- * const isValidScope = OAuth2ScopesEnum.safeParse(OAuth2Scopes.Bot).success;
- */
-export const OAuth2ScopesEnum = z.nativeEnum(OAuth2Scopes);
+export const Oauth2ScopesEnum = z.nativeEnum(Oauth2Scopes);
 
 /**
- * Schema for OAuth2 bot authorization parameters.
- * These parameters are used when authorizing a bot via OAuth2.
- *
+ * @see {@link https://discord.com/developers/docs/topics/oauth2#authorization-code-grant-access-token-response}
+ */
+export const Oauth2AccessTokenResponse = z.object({
+	/**
+	 * The access token to use for authentication
+	 */
+	access_token: z.string(),
+	/**
+	 * The type of token
+	 */
+	token_type: AuthTypesEnum,
+	/**
+	 * The number of seconds until the token expires
+	 */
+	expires_in: z.number(),
+	/**
+	 * The refresh token to use to get a new access token
+	 */
+	refresh_token: z.string(),
+	/**
+	 * The scopes the token has access to
+	 */
+	scope: z.string(),
+});
+
+export type Oauth2AccessTokenResponseInfer = z.infer<typeof Oauth2AccessTokenResponse>;
+
+/**
+ * @see {@link https://discord.com/developers/docs/topics/oauth2#client-credentials-grant-client-credentials-access-token-response}
+ */
+export const Oauth2ClientCredentialsAccessTokenResponse = z.object({
+	/**
+	 * The access token to use for authentication
+	 */
+	access_token: z.string(),
+	/**
+	 * The type of token
+	 */
+	token_type: AuthTypesEnum,
+	/**
+	 * The number of seconds until the token expires
+	 */
+	expires_in: z.number(),
+	/**
+	 * The scopes the token has access to
+	 */
+	scope: z.string(),
+});
+
+export type Oauth2ClientCredentialsAccessTokenResponseInfer = z.infer<typeof Oauth2ClientCredentialsAccessTokenResponse>;
+
+/**
  * @see {@link https://discord.com/developers/docs/topics/oauth2#bot-authorization-flow-bot-auth-parameters}
  */
-export const OAuth2BotAuthorizationParams = z.object({
+export const Oauth2BotAuthParameters = z.object({
 	/**
-	 * Your app's client id.
-	 *
-	 * @example
-	 * const params = { client_id: "your_client_id" };
+	 * Your app's client id
 	 */
-	client_id: z.string(),
+	client_id: Snowflake,
 	/**
-	 * Needs to include bot for the bot flow.
-	 *
-	 * @example
-	 * const params = { scope: OAuth2Scopes.Bot };
+	 * Needs to include bot for the bot flow
 	 */
-	scope: z.literal(OAuth2Scopes.Bot),
+	scope: z.union([z.literal(Oauth2Scopes.Bot), Oauth2ScopesEnum]),
 	/**
-	 * The permissions you're requesting.
-	 *
-	 * @example
-	 * const params = { permissions: 0 };
+	 * The permissions you're requesting
 	 */
-	permissions: z.number(),
+	permissions: z.string(),
 	/**
-	 * Pre-fills the dropdown picker with a guild for the user.
-	 *
-	 * @example
-	 * const params = { guild_id: "your_guild_id" };
+	 * Pre-fills the dropdown picker with a guild for the user
 	 */
-	guild_id: z.string(),
+	guild_id: Snowflake.optional(),
 	/**
-	 * Disallows the user from changing the guild dropdown.
-	 *
-	 * @example
-	 * const params = { disable_guild_select: true };
+	 * Disallows the user from changing the guild dropdown
 	 */
 	disable_guild_select: z.boolean(),
 });
 
-/**
- * Inferred type for OAuth2 bot authorization parameters schema.
- *
- * @example
- * const params: OAuth2BotAuthorizationParamsInfer = {
- *   client_id: "your_client_id",
- *   scope: OAuth2Scopes.Bot,
- *   permissions: BigInt(0),
- *   guild_id: "your_guild_id",
- *   disable_guild_select: true
- * };
- */
-export type OAuth2BotAuthorizationParamsInfer = z.infer<typeof OAuth2BotAuthorizationParams>;
+export type Oauth2BotAuthParametersInfer = z.infer<typeof Oauth2BotAuthParameters>;

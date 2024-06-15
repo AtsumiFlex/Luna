@@ -2,207 +2,99 @@ import { z } from "zod";
 import { Integer, Snowflake } from "../globals/formats";
 
 /**
- * Enumeration of role flags.
- * Represents various flags that can be assigned to a role.
- *
  * @see {@link https://discord.com/developers/docs/topics/permissions#role-object-role-flags}
  */
 export enum RoleFlags {
-	/**
-	 * Role can be selected by members in an onboarding prompt.
-	 *
-	 * @example
-	 * const flag = RoleFlags.InPrompt;
-	 * console.log(flag); // Output: 1
-	 */
 	InPrompt = 1,
 }
 
-/**
- * Zod schema for role flags enumeration.
- * This schema is used for validating {@link RoleFlags} values.
- *
- * @example
- * const isValidFlag = RoleFlagsEnum.safeParse(RoleFlags.InPrompt).success;
- */
 export const RoleFlagsEnum = z.nativeEnum(RoleFlags);
 
 /**
- * Schema for the Role Tags Structure.
- * Represents the structure of role tags.
- *
  * @see {@link https://discord.com/developers/docs/topics/permissions#role-object-role-tags-structure}
  */
 export const RoleTagsStructure = z.object({
 	/**
-	 * The id of the bot this role belongs to.
-	 *
-	 * @example
-	 * const tags = { bot_id: "123456789012345678" };
+	 * The id of the bot this role belongs to
 	 */
 	bot_id: Snowflake.optional(),
 	/**
-	 * The id of the integration this role belongs to.
-	 *
-	 * @example
-	 * const tags = { integration_id: "123456789012345678" };
+	 * The id of the integration this role belongs to
 	 */
 	integration_id: Snowflake.optional(),
 	/**
-	 * Whether this is the guild's Booster role.
-	 *
-	 * @example
-	 * const tags = { premium_subscriber: null };
+	 * Whether this is the guild's Booster role
 	 */
 	premium_subscriber: z.null().optional(),
 	/**
-	 * The id of this role's subscription sku and listing.
-	 *
-	 * @example
-	 * const tags = { subscription_listing_id: "123456789012345678" };
+	 * The id of this role's subscription sku and listing
 	 */
 	subscription_listing_id: Snowflake.optional(),
 	/**
-	 * Whether this role is available for purchase.
-	 *
-	 * @example
-	 * const tags = { available_for_purchase: null };
+	 * Whether this role is available for purchase
 	 */
 	available_for_purchase: z.null().optional(),
 	/**
-	 * Whether this role is a guild's linked role.
-	 *
-	 * @example
-	 * const tags = { guild_connections: null };
+	 * Whether this role is a guild's linked role
 	 */
 	guild_connections: z.null().optional(),
 });
 
-/**
- * Inferred type for the Role Tags Structure schema.
- *
- * @example
- * const tags: RoleTagsStructureInfer = {
- *   bot_id: "123456789012345678",
- *   integration_id: "123456789012345678",
- *   premium_subscriber: null,
- *   subscription_listing_id: "123456789012345678",
- *   available_for_purchase: null,
- *   guild_connections: null
- * };
- */
 export type RoleTagsStructureInfer = z.infer<typeof RoleTagsStructure>;
 
 /**
- * Schema for the Role Structure.
- * Represents the structure of a role object.
- *
  * @see {@link https://discord.com/developers/docs/topics/permissions#role-object-role-structure}
  */
 export const RoleStructure = z.object({
 	/**
-	 * The id of the role.
-	 *
-	 * @example
-	 * const role = { id: "123456789012345678" };
+	 * Role id
 	 */
 	id: Snowflake,
 	/**
-	 * The name of the role.
-	 *
-	 * @example
-	 * const role = { name: "Admin" };
+	 * Role name
 	 */
 	name: z.string(),
 	/**
-	 * The color of the role.
-	 *
-	 * @example
-	 * const role = { color: 0x1abc9c };
+	 * Integer representation of hexadecimal color code
 	 */
 	color: Integer,
 	/**
-	 * Whether the role is hoisted.
-	 *
-	 * @example
-	 * const role = { hoist: true };
+	 * If this role is pinned in the user listing
 	 */
 	hoist: z.boolean(),
 	/**
-	 * The icon hash of the role.
-	 *
-	 * @example
-	 * const role = { icon: "a_1234567890abcdef" };
+	 * Role icon hash
 	 */
 	icon: z.string().optional().nullable(),
 	/**
-	 * The unicode emoji of the role.
-	 *
-	 * @example
-	 * const role = { unicode_emoji: "😊" };
+	 * Role unicode emoji
 	 */
 	unicode_emoji: z.string().optional().nullable(),
 	/**
-	 * The position of the role.
-	 *
-	 * @example
-	 * const role = { position: 1 };
+	 * Position of this role
 	 */
 	position: Integer,
 	/**
-	 * The permissions of the role.
-	 *
-	 * @example
-	 * const role = { permissions: "2147483647" };
+	 * Permission bit set
 	 */
 	permissions: z.string(),
 	/**
-	 * Whether the role is managed.
-	 *
-	 * @example
-	 * const role = { managed: false };
+	 * Whether this role is managed by an integration
 	 */
 	managed: z.boolean(),
 	/**
-	 * Whether the role is mentionable.
-	 *
-	 * @example
-	 * const role = { mentionable: true };
+	 * Whether this role is mentionable
 	 */
 	mentionable: z.boolean(),
 	/**
-	 * The tags of the role.
-	 *
-	 * @example
-	 * const role = { tags: { bot_id: "123456789012345678" } };
+	 * Role tags object
 	 */
 	tags: RoleTagsStructure.optional(),
 	/**
-	 * The flags of the role.
-	 *
-	 * @example
-	 * const role = { flags: RoleFlags.InPrompt };
+	 * Role flags combined as a bitfield
+	 * REMARK: This should be a bigint, but it's not clear how to represent that in Zod
 	 */
 	flags: z.union([RoleFlagsEnum, z.bigint()]),
 });
 
-/**
- * Inferred type for the Role Structure schema.
- *
- * @example
- * const role: RoleStructureInfer = {
- *   id: "123456789012345678",
- *   name: "Admin",
- *   color: 0x1abc9c,
- *   hoist: true,
- *   icon: "a_1234567890abcdef",
- *   unicode_emoji: "😊",
- *   position: 1,
- *   permissions: "2147483647",
- *   managed: false,
- *   mentionable: true,
- *   tags: { bot_id: "123456789012345678" },
- *   flags: RoleFlags.InPrompt
- * };
- */
 export type RoleStructureInfer = z.infer<typeof RoleStructure>;

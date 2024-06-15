@@ -3,16 +3,15 @@
   "extends": "@lunajs/ts-config/base.json",
   "compilerOptions": {
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
-    "rootDir": "./src/",
-    "baseUrl": "./",
-    "outDir": "./dist/",
-    "declarationMap": true,
+    "rootDir": "./src",
+    "outDir": "./dist"
   },
   "include": [
-    "src/**/*.ts"
+    "src"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "test"
   ]
 }

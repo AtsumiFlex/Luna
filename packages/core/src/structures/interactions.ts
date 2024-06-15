@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { IntegerInfer } from "../globals/formats";
 import { Integer, Snowflake } from "../globals/formats";
+import type { Locales } from "../globals/locales";
 import { LocalesEnum } from "../globals/locales";
 import { ApplicationIntegrationTypesEnum } from "./applications";
 import type { ChannelTypes } from "./channels";
@@ -24,69 +25,17 @@ import { UserStructure } from "./users";
  * @see {@link https://discord.com/developers/docs/interactions/message-components#component-object-component-types}
  */
 export enum ComponentTypes {
-	/**
-	 * Container for other components
-	 */
 	ActionRow = 1,
-	/**
-	 * Button object
-	 */
 	Button = 2,
-	/**
-	 * Select menu for picking from defined text options
-	 */
-	Select = 3,
-	/**
-	 * Text input object
-	 */
+	SelectMenu = 3,
 	TextInput = 4,
-	/**
-	 * Select menu for users
-	 */
 	UserSelect = 5,
-	/**
-	 * Select menu for roles
-	 */
 	RoleSelect = 6,
-	/**
-	 * Select menu for mentionables (users and roles)
-	 */
 	MentionableSelect = 7,
-	/**
-	 * Select menu for channels
-	 */
 	ChannelSelect = 8,
 }
 
 export const ComponentTypesEnum = z.nativeEnum(ComponentTypes);
-
-/**
- * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-type}
- */
-export enum InteractionTypes {
-	/**
-	 * ACK a Ping
-	 */
-	Ping = 1,
-	/**
-	 * A command
-	 */
-	ApplicationCommand = 2,
-	/**
-	 * A component interaction
-	 */
-	MessageComponent = 3,
-	/**
-	 * An autocomplete interaction
-	 */
-	ApplicationCommandAutocomplete = 4,
-	/**
-	 * A modal submit interaction
-	 */
-	ModalSubmit = 5,
-}
-
-export const InteractionTypesEnum = z.nativeEnum(InteractionTypes);
 
 /**
  * @see {@link https://discord.com/developers/docs/interactions/message-components#text-input-object-text-input-styles}
@@ -203,7 +152,7 @@ export const SelectMenuStructure = z.object({
 	/**
 	 * Type of select menu component (text: 3, user: 5, role: 6, mentionable: 7, channels: 8)
 	 */
-	type: z.union([z.literal(ComponentTypes.Select), z.literal(ComponentTypes.UserSelect), z.literal(ComponentTypes.RoleSelect), z.literal(ComponentTypes.MentionableSelect), z.literal(ComponentTypes.ChannelSelect)]),
+	type: z.union([z.literal(ComponentTypes.SelectMenu), z.literal(ComponentTypes.UserSelect), z.literal(ComponentTypes.RoleSelect), z.literal(ComponentTypes.MentionableSelect), z.literal(ComponentTypes.ChannelSelect)]),
 	/**
 	 * ID for the select menu; max 100 characters
 	 */
@@ -211,7 +160,7 @@ export const SelectMenuStructure = z.object({
 	/**
 	 * Specified choices in a select menu (only required and available for string selects (type 3); max 25
 	 */
-	options: z.array(SelectMenuOptionStructure).optional(),
+	options: z.array(SelectMenuOptionStructure).max(25).optional(),
 	/**
 	 * List of channel types to include in the channel select component (type 8)
 	 */
@@ -244,25 +193,10 @@ export type SelectMenuStructureInfer = z.infer<typeof SelectMenuStructure>;
  * @see {@link https://discord.com/developers/docs/interactions/message-components#button-object-button-styles}
  */
 export enum ButtonStyles {
-	/**
-	 * Blurple button, requires custom_id
-	 */
 	Primary = 1,
-	/**
-	 * Grey button, requires custom_id
-	 */
 	Secondary = 2,
-	/**
-	 * Green button, requires custom_id
-	 */
 	Success = 3,
-	/**
-	 * Red button, requires custom_id
-	 */
 	Danger = 4,
-	/**
-	 * Grey button, requires url
-	 */
 	Link = 5,
 }
 
@@ -309,20 +243,36 @@ export const ButtonStructure = z.object({
 export type ButtonStructureInfer = z.infer<typeof ButtonStructure>;
 
 /**
+ * @see {@link https://discord.com/developers/docs/interactions/message-components#component-object-example-component}
+ */
+export const ComponentStructure = z.object({
+	/**
+	 * 1 for ActionRow, 2 for Button, 3 for SelectMenu
+	 */
+	type: z.union([z.literal(ComponentTypes.ActionRow), z.literal(ComponentTypes.Button), z.literal(ComponentTypes.SelectMenu), z.literal(ComponentTypes.TextInput)]),
+	/**
+	 * 1-25 components
+	 */
+	components: z.array(z.union([ButtonStructure, SelectMenuStructure, TextInputStructure])).optional(),
+});
+
+export type ComponentStructureInfer = z.infer<typeof ComponentStructure>;
+
+/**
  * @see {@link https://discord.com/developers/docs/interactions/application-commands#application-command-permissions-object-application-command-permission-type}
  */
-export enum ApplicationCommandPermissionType {
+export enum ApplicationCommandPermissionTypes {
 	Role = 1,
 	User = 2,
 	Channel = 3,
 }
 
-export const ApplicationCommandPermissionTypeEnum = z.nativeEnum(ApplicationCommandPermissionType);
+export const ApplicationCommandPermissionTypesEnum = z.nativeEnum(ApplicationCommandPermissionTypes);
 
 /**
  * @see {@link https://discord.com/developers/docs/interactions/application-commands#application-command-permissions-object-application-command-permissions-structure}
  */
-export const ApplicationCommandPermissionsStructure = z.object({
+export const ApplicationCommandPermissionStructure = z.object({
 	/**
 	 * ID of the role, user, or channel. It can also be a permission constant
 	 */
@@ -330,19 +280,19 @@ export const ApplicationCommandPermissionsStructure = z.object({
 	/**
 	 * role (1), user (2), or channel (3)
 	 */
-	type: ApplicationCommandPermissionTypeEnum,
+	type: ApplicationCommandPermissionTypesEnum,
 	/**
 	 * true to allow, false, to disallow
 	 */
 	permission: z.boolean(),
 });
 
-export type ApplicationCommandPermissionsStructureInfer = z.infer<typeof ApplicationCommandPermissionsStructure>;
+export type ApplicationCommandPermissionStructureInfer = z.infer<typeof ApplicationCommandPermissionStructure>;
 
 /**
  * @see {@link https://discord.com/developers/docs/interactions/application-commands#application-command-permissions-object-guild-application-command-permissions-structure}
  */
-export const GuildApplicationCommandPermissionsStructure = z.object({
+export const GuildApplicationCommandPermissionStructure = z.object({
 	/**
 	 * ID of the command or the application ID
 	 */
@@ -358,10 +308,10 @@ export const GuildApplicationCommandPermissionsStructure = z.object({
 	/**
 	 * Permissions for the command in the guild, max of 100
 	 */
-	permissions: z.array(ApplicationCommandPermissionsStructure),
+	permissions: z.array(ApplicationCommandPermissionStructure).max(100),
 });
 
-export type GuildApplicationCommandPermissionsStructureInfer = z.infer<typeof GuildApplicationCommandPermissionsStructure>;
+export type GuildApplicationCommandPermissionStructureInfer = z.infer<typeof GuildApplicationCommandPermissionStructure>;
 
 /**
  * @see {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-choice-structure}
@@ -378,7 +328,7 @@ export const ApplicationCommandOptionChoiceStructure = z.object({
 	/**
 	 * Value for the choice, up to 100 characters if string
 	 */
-	value: z.union([z.string(), Integer]),
+	value: z.union([Integer, z.number()]),
 });
 
 export type ApplicationCommandOptionChoiceStructureInfer = z.infer<typeof ApplicationCommandOptionChoiceStructure>;
@@ -386,68 +336,63 @@ export type ApplicationCommandOptionChoiceStructureInfer = z.infer<typeof Applic
 /**
  * @see {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-type}
  */
-export enum ApplicationCommandOptionType {
+export enum ApplicationCommandOptionTypes {
 	SubCommand = 1,
 	SubCommandGroup = 2,
 	String = 3,
-	/**
-	 * Any integer between -2^53 and 2^53
-	 */
 	Integer = 4,
 	Boolean = 5,
 	User = 6,
-	/**
-	 * Includes all channel types + categories
-	 */
 	Channel = 7,
 	Role = 8,
-	/**
-	 * Includes users and roles
-	 */
 	Mentionable = 9,
-	/**
-	 * Any double between -2^53 and 2^53
-	 */
 	Number = 10,
-	/**
-	 * Attachment object
-	 */
 	Attachment = 11,
 }
 
-export const ApplicationCommandOptionTypeEnum = z.nativeEnum(ApplicationCommandOptionType);
+export const ApplicationCommandOptionTypesEnum = z.nativeEnum(ApplicationCommandOptionTypes);
 
 export type ApplicationCommandOptionStructureInfer = {
-	autocomplete?: boolean;
-	channel_types?: ChannelTypes[];
-	choices?: ApplicationCommandOptionChoiceStructureInfer[];
-	description: string;
-	max_length?: IntegerInfer;
-	max_value?: IntegerInfer;
-	min_length?: IntegerInfer;
-	min_value?: IntegerInfer;
-	name: string;
-	options?: ApplicationCommandOptionStructureInfer[];
-	required?: boolean;
-	type: ApplicationCommandOptionType;
+	autocomplete?: z.ZodType<boolean>;
+	channel_types?: z.ZodType<ChannelTypes[]>;
+	choices?: z.ZodType<ApplicationCommandOptionChoiceStructureInfer[]>;
+	description: z.ZodType<string>;
+	description_localizations?: z.ZodType<Record<Locales, string>>;
+	max_length?: z.ZodType<IntegerInfer>;
+	max_value?: z.ZodType<IntegerInfer>;
+	min_length?: z.ZodType<IntegerInfer>;
+	min_value?: z.ZodType<IntegerInfer>;
+	name: z.ZodType<string>;
+	name_localizations?: z.ZodType<Record<Locales, string>>;
+	options?: z.ZodType<ApplicationCommandOptionStructureInfer[]>;
+	required?: z.ZodType<boolean>;
+	type: z.ZodType<ApplicationCommandOptionTypes>;
 };
 
 /**
  * @see {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-structure}
  */
-export const ApplicationCommandOptionStructure: z.ZodType<ApplicationCommandOptionStructureInfer> = z.object({
+export const ApplicationCommandOptionStructure: z.ZodObject<ApplicationCommandOptionStructureInfer> = z.object({
 	/**
 	 * Type of option
 	 */
-	type: ApplicationCommandOptionTypeEnum,
+	type: ApplicationCommandOptionTypesEnum,
 	/**
 	 * 1-32 character name
 	 */
-	name: z.string().min(1).max(32),
+	name: z.string().regex(/^[-_\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}$/u),
+	/**
+	 * Localization dictionary for the name field. Values follow the same restrictions as name
+	 */
+	name_localizations: z.record(LocalesEnum, z.string().regex(/^[-_\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}$/u)).optional().nullable(),
 	/**
 	 * 1-100 character description
 	 */
 	description: z.string().min(1).max(100),
+	/**
+	 * Localization dictionary for the description field. Values follow the same restrictions as description
+	 */
+	description_localizations: z.record(LocalesEnum, z.string().min(1).max(100)).optional().nullable(),
 	/**
 	 * Whether the parameter is required or optional, default false
 	 */
@@ -455,11 +400,11 @@ export const ApplicationCommandOptionStructure: z.ZodType<ApplicationCommandOpti
 	/**
 	 * Choices for the user to pick from, max 25
 	 */
-	choices: z.array(ApplicationCommandOptionChoiceStructure).optional(),
+	choices: z.array(ApplicationCommandOptionChoiceStructure).max(25).optional(),
 	/**
 	 * If the option is a subcommand or subcommand group type, these nested options will be the parameters or subcommands respectively; up to 25
 	 */
-	options: z.lazy(() => z.array(ApplicationCommandOptionStructure)),
+	options: z.array(z.lazy(() => ApplicationCommandOptionStructure)).max(25).optional(),
 	/**
 	 * The channels shown will be restricted to these types
 	 */
@@ -507,6 +452,26 @@ export enum ApplicationCommandTypes {
 export const ApplicationCommandTypesEnum = z.nativeEnum(ApplicationCommandTypes);
 
 /**
+ * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-context-types}
+ */
+export enum InteractionContextTypes {
+	/**
+	 * Interaction can be used within servers
+	 */
+	Guild = 0,
+	/**
+	 * Interaction can be used within DMs with the app's bot user
+	 */
+	BotDM = 1,
+	/**
+	 * Interaction can be used within Group DMs and DMs other than the app's bot user
+	 */
+	PrivateChannel = 2,
+}
+
+export const InteractionContextTypesEnum = z.nativeEnum(InteractionContextTypes);
+
+/**
  * @see {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure}
  */
 export const ApplicationCommandStructure = z.object({
@@ -517,7 +482,7 @@ export const ApplicationCommandStructure = z.object({
 	/**
 	 * Type of command, defaults to 1
 	 */
-	type: ApplicationCommandTypesEnum.optional(),
+	type: ApplicationCommandTypesEnum.default(ApplicationCommandTypes.ChatInput).optional(),
 	/**
 	 * ID of the parent application
 	 */
@@ -545,19 +510,19 @@ export const ApplicationCommandStructure = z.object({
 	/**
 	 * Parameters for the command, max of 25
 	 */
-	options: z.array(ApplicationCommandOptionStructure).optional(),
+	options: z.array(ApplicationCommandOptionStructure).max(25).optional(),
 	/**
 	 * Set of permissions represented as a bit set
 	 */
 	default_member_permissions: z.string().nullable(),
 	/**
-	 * Deprecated (use contexts instead); Indicates whether the command is available in DMs with the app, only for globally-scoped commands. By default, commands are visible
+	 * Deprecated (use contexts instead); Indicates whether the command is available in DMs with the app, only for globally-scoped commands. By default, commands are visible.
 	 */
 	dm_permission: z.boolean().optional(),
 	/**
 	 * Not recommended for use as field will soon be deprecated. Indicates whether the command is enabled by default when the app is added to a guild, defaults to true
 	 */
-	default_permission: z.boolean().optional(),
+	default_permission: z.boolean().optional().nullable(),
 	/**
 	 * Indicates whether the command is age-restricted, defaults to false
 	 */
@@ -565,11 +530,11 @@ export const ApplicationCommandStructure = z.object({
 	/**
 	 * Installation context(s) where the command is available, only for globally-scoped commands. Defaults to GUILD_INSTALL (0)
 	 */
-	integration_types: z.array(z.string()).optional(),
+	integration_types: z.array(ApplicationIntegrationTypesEnum).optional(),
 	/**
-	 * Interaction context(s) where the command can be used, only for globally-scoped commands. By default, all interaction context types included for new commands
+	 * Interaction context(s) where the command can be used, only for globally-scoped commands. By default, all interaction context types included for new commands.
 	 */
-	contexts: z.array(z.string()).optional(),
+	contexts: z.array(InteractionContextTypesEnum).optional().nullable(),
 	/**
 	 * Autoincrementing version identifier updated during substantial record changes
 	 */
@@ -591,9 +556,9 @@ export const ModalComponentStructure = z.object({
 	 */
 	title: z.string().max(45),
 	/**
-	 * Components that make up the modal
+	 * Components that make up the modal; between 1 and 5 components
 	 */
-	components: z.array(z.union([ButtonStructure, SelectMenuStructure, TextInputStructure])).min(1).max(5),
+	components: z.array(ComponentStructure).min(1).max(5),
 });
 
 export type ModalComponentStructureInfer = z.infer<typeof ModalComponentStructure>;
@@ -601,65 +566,66 @@ export type ModalComponentStructureInfer = z.infer<typeof ModalComponentStructur
 /**
  * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-autocomplete}
  */
-export const AutocompleteComponentStructure = z.object({
+export const AutocompleteStructure = z.object({
 	/**
-	 * Autocomplete choices (max of 25 choices)
+	 * The choices for the autocomplete
 	 */
 	choices: z.array(ApplicationCommandOptionChoiceStructure).max(25),
 });
 
-export type AutocompleteComponentStructureInfer = z.infer<typeof AutocompleteComponentStructure>;
+export type AutocompleteStructureInfer = z.infer<typeof AutocompleteStructure>;
 
 /**
- * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-interaction-callback-data-structure}
+ * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-messages}
  */
-export const InteractionCallbackDataStructure = z.object({
+export const InteractionCallDataStructure = z.object({
 	/**
-	 * Is the response TTS
+	 * Whether the response is TTS
 	 */
 	tts: z.boolean().optional(),
 	/**
-	 * Message content
+	 * The message content
 	 */
 	content: z.string().optional(),
 	/**
-	 * Supports up to 10 embeds
+	 * The embeds for the message
 	 */
 	embeds: z.array(EmbedStructure).max(10).optional(),
 	/**
-	 * Allowed mentions object
+	 * The allowed mentions for the message
 	 */
-	allowed_mentions: z.lazy(() => AllowedMentionsStructure).optional(),
+	allowed_mentions: AllowedMentionsStructure.optional(),
 	/**
-	 * Message flags combined as a bitfield (only SUPPRESS_EMBEDS, EPHEMERAL, and SUPPRESS_NOTIFICATIONS can be set)
+	 * The flags for the message
+	 * REMARK: This is a bitfield, but we don't have a way to represent that in Zod
 	 */
-	flags: z.union([MessageFlagsEnum, z.bigint()]).optional(),
+	flags: z.union([Integer, MessageFlagsEnum]).optional(),
 	/**
-	 * Message components
+	 * The components for the message
 	 */
-	components: z.array(z.union([ButtonStructure, SelectMenuStructure, TextInputStructure])).optional(),
+	components: z.array(ComponentStructure).optional(),
 	/**
-	 * Attachment objects with filename and description
+	 * The attachments for the message
 	 */
-	attachments: z.array(z.lazy(() => AttachmentStructure.partial())).optional(),
+	attachments: z.array(AttachmentStructure.partial()).optional(),
 	/**
-	 * A poll!
+	 * The poll for the message
 	 */
 	poll: PollStructure.optional(),
 });
 
-export type InteractionCallbackDataStructureInfer = z.infer<typeof InteractionCallbackDataStructure>;
+export type InteractionCallDataStructureInfer = z.infer<typeof InteractionCallDataStructure>;
 
 /**
  * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-interaction-callback-type}
  */
-export enum InteractionCallbackType {
+export enum InteractionCallbackTypes {
 	/**
 	 * ACK a Ping
 	 */
 	Pong = 1,
 	/**
-	 * respond to an interaction with a message
+	 * Respond to an interaction with a message
 	 */
 	ChannelMessageWithSource = 4,
 	/**
@@ -667,41 +633,41 @@ export enum InteractionCallbackType {
 	 */
 	DeferredChannelMessageWithSource = 5,
 	/**
-	 * for components, ACK an interaction and edit the original message later; the user does not see a loading state
+	 * For components, ACK an interaction and edit the original message later; the user does not see a loading state
 	 */
 	DeferredUpdateMessage = 6,
 	/**
-	 * for components, edit the message the component was attached to
+	 * For components, edit the message the component was attached to
 	 */
 	UpdateMessage = 7,
 	/**
-	 * respond to an autocomplete interaction with suggested choices
+	 * Respond to an autocomplete interaction with suggested choices
 	 */
 	ApplicationCommandAutocompleteResult = 8,
 	/**
-	 * respond to an interaction with a popup modal
+	 * Respond to an interaction with a popup modal
 	 */
 	Modal = 9,
 	/**
-	 * respond to an interaction with an upgrade button, only available for apps with monetization enabled
+	 * Respond to an interaction with an upgrade button, only available for apps with monetization enabled
 	 */
 	PremiumRequired = 10,
 }
 
-export const InteractionCallbackTypeEnum = z.nativeEnum(InteractionCallbackType);
+export const InteractionCallbackTypesEnum = z.nativeEnum(InteractionCallbackTypes);
 
 /**
  * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-interaction-response-structure}
  */
 export const InteractionResponseStructure = z.object({
 	/**
-	 * the type of response
+	 * The type of response
 	 */
-	type: InteractionCallbackTypeEnum,
+	type: InteractionCallbackTypesEnum,
 	/**
-	 * an optional response message
+	 * An optional response message
 	 */
-	data: InteractionCallbackDataStructure.optional(),
+	data: InteractionCallDataStructure.optional(),
 });
 
 export type InteractionResponseStructureInfer = z.infer<typeof InteractionResponseStructure>;
@@ -717,7 +683,7 @@ export const MessageInteractionStructure = z.object({
 	/**
 	 * Type of interaction
 	 */
-	type: InteractionTypesEnum,
+	type: ApplicationCommandTypesEnum,
 	/**
 	 * Name of the application command, including subcommands and subcommand groups
 	 */
@@ -729,7 +695,7 @@ export const MessageInteractionStructure = z.object({
 	/**
 	 * Member who invoked the interaction in the guild
 	 */
-	member: z.lazy(() => GuildMemberStructure.partial()).optional(),
+	member: GuildMemberStructure.partial().optional(),
 });
 
 export type MessageInteractionStructureInfer = z.infer<typeof MessageInteractionStructure>;
@@ -738,8 +704,8 @@ export type ApplicationCommandInteractionDataOptionStructureInfer = {
 	focused?: boolean;
 	name: string;
 	options?: ApplicationCommandInteractionDataOptionStructureInfer[];
-	type: ApplicationCommandOptionType;
-	value?: boolean | number | string;
+	type: ApplicationCommandOptionTypes;
+	value?: IntegerInfer | boolean | string;
 };
 
 /**
@@ -753,7 +719,7 @@ export const ApplicationCommandInteractionDataOptionStructure: z.ZodType<Applica
 	/**
 	 * Value of application command option type
 	 */
-	type: ApplicationCommandOptionTypeEnum,
+	type: ApplicationCommandOptionTypesEnum,
 	/**
 	 * Value of the option resulting from user input
 	 */
@@ -773,27 +739,45 @@ export const ApplicationCommandInteractionDataOptionStructure: z.ZodType<Applica
  */
 export const ResolvedDataStructure = z.object({
 	/**
-	 * The ids and User objects
+	 * Map of Snowflakes to user objects
 	 */
 	users: z.map(Snowflake, UserStructure).optional(),
 	/**
-	 * The ids and partial Member objects
+	 * Map of Snowflakes to partial member objects
 	 */
-	members: z.map(Snowflake, z.lazy(() => GuildMemberStructure.partial())).optional(),
+	members: z.map(Snowflake, GuildMemberStructure.pick({
+		premium_since: true,
+		nick: true,
+		avatar: true,
+		avatar_decoration_data: true,
+		flags: true,
+		communication_disabled_until: true,
+		joined_at: true,
+		pending: true,
+		permissions: true,
+		roles: true,
+	})).optional(),
 	/**
-	 * The ids and Role objects
+	 * Map of Snowflakes to role objects
 	 */
 	roles: z.map(Snowflake, RoleStructure).optional(),
 	/**
-	 * The ids and partial Channel objects
+	 * Map of Snowflakes to partial channel objects
 	 */
-	channels: z.map(Snowflake, z.lazy(() => ChannelStructure.partial())).optional(),
+	channels: z.map(Snowflake, ChannelStructure.pick({
+		id: true,
+		name: true,
+		type: true,
+		permissions: true,
+		thread_metadata: true,
+		parent_id: true,
+	})).optional(),
 	/**
-	 * The ids and partial Message objects
+	 * Map of Snowflakes to partial messages objects
 	 */
-	messages: z.map(Snowflake, MessageStructure).optional(),
+	messages: z.map(Snowflake, MessageStructure.partial()).optional(),
 	/**
-	 * The ids and attachment objects
+	 * Map of Snowflakes to attachment objects
 	 */
 	attachments: z.map(Snowflake, AttachmentStructure).optional(),
 });
@@ -809,9 +793,9 @@ export const ModalSubmitDataStructure = z.object({
 	 */
 	custom_id: z.string(),
 	/**
-	 * TODO: Array of message components the values submitted by the user
+	 * The values submitted by the user
 	 */
-	components: z.array(z.unknown()),
+	components: z.array(ComponentStructure),
 });
 
 export type ModalSubmitDataStructureInfer = z.infer<typeof ModalSubmitDataStructure>;
@@ -845,31 +829,31 @@ export type MessageComponentDataStructureInfer = z.infer<typeof MessageComponent
  */
 export const ApplicationCommandInteractionDataStructure = z.object({
 	/**
-	 * the ID of the invoked command
+	 * The ID of the invoked command
 	 */
 	id: Snowflake,
 	/**
-	 * the name of the invoked command
+	 * The name of the invoked command
 	 */
 	name: z.string(),
 	/**
-	 * the type of the invoked command
+	 * The type of the invoked command
 	 */
 	type: ApplicationCommandTypesEnum,
 	/**
-	 * converted users + roles + channels + attachments
+	 * Converted users + roles + channels + attachments
 	 */
 	resolved: ResolvedDataStructure.optional(),
 	/**
-	 * the params + values from the user
+	 * The params + values from the user
 	 */
 	options: z.array(ApplicationCommandInteractionDataOptionStructure).optional(),
 	/**
-	 * the id of the guild the command is registered to
+	 * The ID of the guild the command is registered to
 	 */
 	guild_id: Snowflake.optional(),
 	/**
-	 * id of the user or message targeted by a user or message command
+	 * The ID of the user or message targeted by a user or message command
 	 */
 	target_id: Snowflake.optional(),
 });
@@ -877,24 +861,17 @@ export const ApplicationCommandInteractionDataStructure = z.object({
 export type ApplicationCommandInteractionDataStructureInfer = z.infer<typeof ApplicationCommandInteractionDataStructure>;
 
 /**
- * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-context-types}
+ * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-type}
  */
-export enum InteractionContextTypes {
-	/**
-	 * Interaction can be used within servers
-	 */
-	Guild = 0,
-	/**
-	 * Interaction can be used within DMs with the app's bot user
-	 */
-	BotDM = 1,
-	/**
-	 * Interaction can be used within Group DMs and DMs other than the app's bot user
-	 */
-	PrivateChannel = 2,
+export enum InteractionTypes {
+	Ping = 1,
+	ApplicationCommand = 2,
+	MessageComponent = 3,
+	ApplicationCommandAutocomplete = 4,
+	ModalSubmit = 5,
 }
 
-export const InteractionContextTypesEnum = z.nativeEnum(InteractionContextTypes);
+export const InteractionTypesEnum = z.nativeEnum(InteractionTypes);
 
 /**
  * @see {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-structure}
@@ -913,13 +890,13 @@ export const InteractionStructure = z.object({
 	 */
 	type: InteractionTypesEnum,
 	/**
-	 * TODO: Interaction data payload
+	 * Interaction data payload
 	 */
-	data: z.union([ApplicationCommandInteractionDataStructure, ModalSubmitDataStructure, MessageComponentDataStructure, AutocompleteComponentStructure]).optional(),
+	data: ApplicationCommandInteractionDataStructure.optional(),
 	/**
 	 * Guild that the interaction was sent from
 	 */
-	guild: z.lazy(() => GuildStructure.partial()).optional(),
+	guild: GuildStructure.partial().optional(),
 	/**
 	 * Guild that the interaction was sent from
 	 */
@@ -927,7 +904,7 @@ export const InteractionStructure = z.object({
 	/**
 	 * Channel that the interaction was sent from
 	 */
-	channel: z.lazy(() => ChannelStructure.partial()).optional(),
+	channel: ChannelStructure.partial().optional(),
 	/**
 	 * Channel that the interaction was sent from
 	 */
@@ -935,7 +912,7 @@ export const InteractionStructure = z.object({
 	/**
 	 * Guild member data for the invoking user, including permissions
 	 */
-	member: z.lazy(() => GuildMemberStructure.partial()).optional(),
+	member: GuildMemberStructure.optional(),
 	/**
 	 * User object for the invoking user, if invoked in a DM
 	 */
@@ -951,11 +928,11 @@ export const InteractionStructure = z.object({
 	/**
 	 * For components, the message they were attached to
 	 */
-	message: z.lazy(() => MessageStructure.optional()),
+	message: MessageStructure.optional(),
 	/**
 	 * Bitwise set of permissions the app has in the source location of the interaction
 	 */
-	app_permissions: z.string().optional(),
+	app_permissions: z.string(),
 	/**
 	 * Selected language of the invoking user
 	 */
@@ -971,7 +948,7 @@ export const InteractionStructure = z.object({
 	/**
 	 * Mapping of installation contexts that the interaction was authorized for to related user or guild IDs. See Authorizing Integration Owners Object for details
 	 */
-	authorizing_integration_owners: z.record(z.string(), ApplicationIntegrationTypesEnum).optional(),
+	authorizing_integration_owners: z.record(ApplicationIntegrationTypesEnum, z.string()).optional(),
 	/**
 	 * Context where the interaction was triggered from
 	 */

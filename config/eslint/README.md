@@ -1,3 +1,0 @@
-# Luna - eslint
-
-soon...

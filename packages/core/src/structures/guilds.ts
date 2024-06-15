@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { Integer, ISO8601Timestamp, Snowflake } from "../globals/formats";
+import { Integer, Snowflake } from "../globals/formats";
 import { LocalesEnum } from "../globals/locales";
-import { OAuth2ScopesEnum } from "../libs/oauth2";
+import { Oauth2ScopesEnum } from "../libs/oauth2";
 import { ChannelStructure } from "./channels";
 import { EmojiStructure } from "./emojis";
 import { RoleStructure } from "./roles";
@@ -21,7 +21,7 @@ export const GuildOnboardingPromptTypesEnum = z.nativeEnum(GuildOnboardingPrompt
 /**
  * @see {@link https://discord.com/developers/docs/resources/guild#guild-onboarding-object-onboarding-mode}
  */
-export enum GuildOnboardingMode {
+export enum GuildOnboardingModes {
 	/**
 	 * Counts only Default Channels towards constraints
 	 */
@@ -32,7 +32,7 @@ export enum GuildOnboardingMode {
 	Advanced = 1,
 }
 
-export const GuildOnboardingModeEnum = z.nativeEnum(GuildOnboardingMode);
+export const GuildOnboardingModesEnum = z.nativeEnum(GuildOnboardingModes);
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/guild#guild-onboarding-object-prompt-option-structure}
@@ -41,29 +41,25 @@ export const GuildOnboardingPromptOptionStructure = z.object({
 	/**
 	 * ID of the prompt option
 	 */
-	id: Snowflake,
+	id: z.string(),
 	/**
 	 * IDs for channels a member is added to when the option is selected
 	 */
-	channel_ids: z.array(Snowflake),
+	channel_ids: z.array(Snowflake).optional(),
 	/**
 	 * IDs for roles assigned to a member when the option is selected
 	 */
-	role_ids: z.array(Snowflake),
+	role_ids: z.array(Snowflake).optional(),
 	/**
-	 * Emojis of the option
-	 */
-	emoji: EmojiStructure.optional(),
-	/**
-	 * Emojis ID of the option (see below)
+	 * Emoji ID of the option
 	 */
 	emoji_id: Snowflake.optional(),
 	/**
-	 * Emojis name of the option (see below)
+	 * Emoji name of the option
 	 */
 	emoji_name: z.string().optional(),
 	/**
-	 * Whether the emoji is animated (see below)
+	 * Whether the emoji is animated
 	 */
 	emoji_animated: z.boolean().optional(),
 	/**
@@ -85,7 +81,7 @@ export const GuildOnboardingPromptStructure = z.object({
 	/**
 	 * ID of the prompt
 	 */
-	id: Snowflake,
+	id: z.string(),
 	/**
 	 * Type of prompt
 	 */
@@ -137,7 +133,7 @@ export const GuildOnboardingStructure = z.object({
 	/**
 	 * Current mode of onboarding
 	 */
-	mode: GuildOnboardingModeEnum,
+	mode: GuildOnboardingModesEnum,
 });
 
 export type GuildOnboardingStructureInfer = z.infer<typeof GuildOnboardingStructure>;
@@ -265,9 +261,9 @@ export const IntegrationStructure = z.object({
 	 */
 	name: z.string(),
 	/**
-	 * Integration type
+	 * Integration type (twitch, youtube, discord, or guild_subscription)
 	 */
-	type: z.string(),
+	type: z.union([z.literal("twitch"), z.literal("youtube"), z.literal("discord"), z.literal("guild_subscription")]),
 	/**
 	 * Is this integration enabled
 	 */
@@ -281,7 +277,7 @@ export const IntegrationStructure = z.object({
 	 */
 	role_id: Snowflake.optional(),
 	/**
-	 * Whether emoticons should be synced for this integration
+	 * Whether emoticons should be synced for this integration (twitch only currently)
 	 */
 	enable_emoticons: z.boolean().optional(),
 	/**
@@ -303,7 +299,7 @@ export const IntegrationStructure = z.object({
 	/**
 	 * When this integration was last synced
 	 */
-	synced_at: ISO8601Timestamp.optional(),
+	synced_at: z.string().optional(),
 	/**
 	 * How many subscribers this integration has
 	 */
@@ -319,7 +315,7 @@ export const IntegrationStructure = z.object({
 	/**
 	 * The scopes the application has been authorized for
 	 */
-	scopes: z.array(OAuth2ScopesEnum).optional(),
+	scopes: z.array(Oauth2ScopesEnum).optional(),
 });
 
 export type IntegrationStructureInfer = z.infer<typeof IntegrationStructure>;
@@ -371,11 +367,11 @@ export const GuildMemberStructure = z.object({
 	/**
 	 * When the user joined the guild
 	 */
-	joined_at: ISO8601Timestamp,
+	joined_at: z.string(),
 	/**
 	 * When the user started boosting the guild
 	 */
-	premium_since: ISO8601Timestamp.optional(),
+	premium_since: z.string().optional().nullable(),
 	/**
 	 * Whether the user is deafened in voice channels
 	 */
@@ -387,11 +383,11 @@ export const GuildMemberStructure = z.object({
 	/**
 	 * Guild member flags represented as a bit set, defaults to 0
 	 */
-	flags: GuildMemberFlagsEnum,
+	flags: z.union([z.literal(0), GuildMemberFlagsEnum]).default(0),
 	/**
 	 * Whether the user has not yet passed the guild's Membership Screening requirements
 	 */
-	pending: z.boolean().optional(),
+	pending: z.boolean().nullable(),
 	/**
 	 * Total permissions of the member in the channel, including overwrites, returned when in the interaction object
 	 */
@@ -399,11 +395,11 @@ export const GuildMemberStructure = z.object({
 	/**
 	 * When the user's timeout will expire and the user will be able to communicate in the guild again, null or a time in the past if the user is not timed out
 	 */
-	communication_disabled_until: ISO8601Timestamp.optional(),
+	communication_disabled_until: z.string().optional().nullable(),
 	/**
 	 * Data for the member's guild avatar decoration
 	 */
-	avatar_decoration_data: AvatarDecorationDataStructure.optional().nullable(),
+	avatar_decoration_data: AvatarDecorationDataStructure.optional(),
 });
 
 export type GuildMemberStructureInfer = z.infer<typeof GuildMemberStructure>;
@@ -413,27 +409,39 @@ export type GuildMemberStructureInfer = z.infer<typeof GuildMemberStructure>;
  */
 export const GuildWidgetStructure = z.object({
 	/**
-	 * The guild id
+	 * Guild id
 	 */
 	id: Snowflake,
 	/**
-	 * The guild name
+	 * Guild name (2-100 characters)
 	 */
 	name: z.string().min(2).max(100),
 	/**
-	 * The instant invite for the guild's widget
+	 * Instant invite for the guilds specified widget invite channel
 	 */
 	instant_invite: z.string().nullable(),
 	/**
-	 * The voice channels in the guild
+	 * Voice and stage channels which are accessible by @everyone
 	 */
 	channels: z.array(ChannelStructure),
 	/**
-	 * The members in the guild
+	 * Special widget user objects that includes users presence (Limit 100)
+	 * TODO: User presence is not documented
 	 */
-	members: z.array(UserStructure.partial()),
+	members: z.array(z.union([
+		UserStructure.pick({
+			id: true,
+			username: true,
+			discriminator: true,
+			avatar: true,
+		}),
+		z.object({
+			status: z.string(),
+			avatar_url: z.string(),
+		}),
+	])).max(100),
 	/**
-	 * The number of online members in the guild
+	 * Number of online members in this guild
 	 */
 	presence_count: Integer,
 });
@@ -577,23 +585,23 @@ export const GuildFeaturesEnum = z.nativeEnum(GuildFeatures);
  */
 export const GuildPreviewStructure = z.object({
 	/**
-	 * The guild id
+	 * Guild id
 	 */
 	id: Snowflake,
 	/**
-	 * The guild name
+	 * Guild name (2-100 characters)
 	 */
 	name: z.string().min(2).max(100),
 	/**
-	 * The icon hash
+	 * Icon hash
 	 */
 	icon: z.string().nullable(),
 	/**
-	 * The splash hash
+	 * Splash hash
 	 */
 	splash: z.string().nullable(),
 	/**
-	 * The discovery splash hash
+	 * Discovery splash hash
 	 */
 	discovery_splash: z.string().nullable(),
 	/**
@@ -659,7 +667,7 @@ export const SystemChannelFlagsEnum = z.nativeEnum(SystemChannelFlags);
 /**
  * @see {@link https://discord.com/developers/docs/resources/guild#guild-object-premium-tier}
  */
-export enum PremiumTier {
+export enum PremiumTiers {
 	/**
 	 * Guild has not unlocked any Server Boost perks
 	 */
@@ -678,52 +686,52 @@ export enum PremiumTier {
 	Tier3 = 3,
 }
 
-export const PremiumTierEnum = z.nativeEnum(PremiumTier);
+export const PremiumTiersEnum = z.nativeEnum(PremiumTiers);
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/guild#guild-object-guild-nsfw-level}
  */
-export enum GuildNSFWLevels {
+export enum GuildNsfwLevels {
 	Default = 0,
 	Explicit = 1,
 	Safe = 2,
 	AgeRestricted = 3,
 }
 
-export const GuildNSFWLevelsEnum = z.nativeEnum(GuildNSFWLevels);
+export const GuildNsfwLevelsEnum = z.nativeEnum(GuildNsfwLevels);
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/guild#guild-object-verification-level}
  */
-export enum VerificationLevel {
+export enum VerificationLevels {
 	/**
-	 * unrestricted
+	 * Unrestricted
 	 */
 	None = 0,
 	/**
-	 * must have verified email on account
+	 * Must have verified email on account
 	 */
 	Low = 1,
 	/**
-	 * must be registered on Discord for longer than 5 minutes
+	 * Must be registered on Discord for longer than 5 minutes
 	 */
 	Medium = 2,
 	/**
-	 * must be a member of the server for longer than 10 minutes
+	 * Must be a member of the server for longer than 10 minutes
 	 */
 	High = 3,
 	/**
-	 * must have a verified phone number
+	 * Must have a verified phone number
 	 */
 	VeryHigh = 4,
 }
 
-export const VerificationLevelEnum = z.nativeEnum(VerificationLevel);
+export const VerificationLevelsEnum = z.nativeEnum(VerificationLevels);
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/guild#guild-object-mfa-level}
  */
-export enum MFALevel {
+export enum MfaLevels {
 	/**
 	 * Guild has no MFA/2FA requirement for moderation actions
 	 */
@@ -734,12 +742,12 @@ export enum MFALevel {
 	Elevated = 1,
 }
 
-export const MFALevelEnum = z.nativeEnum(MFALevel);
+export const MfaLevelsEnum = z.nativeEnum(MfaLevels);
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/guild#guild-object-explicit-content-filter-level}
  */
-export enum ExplicitContentFilterLevel {
+export enum ExplicitContentFilterLevels {
 	/**
 	 * Media content will not be scanned
 	 */
@@ -754,38 +762,38 @@ export enum ExplicitContentFilterLevel {
 	AllMembers = 2,
 }
 
-export const ExplicitContentFilterLevelEnum = z.nativeEnum(ExplicitContentFilterLevel);
+export const ExplicitContentFilterLevelsEnum = z.nativeEnum(ExplicitContentFilterLevels);
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/guild#guild-object-default-message-notification-level}
  */
-export enum DefaultMessageNotificationLevel {
+export enum DefaultMessageNotificationLevels {
 	/**
-	 * members will receive notifications for all messages by default
+	 * All messages will trigger notifications
 	 */
 	AllMessages = 0,
 	/**
-	 * members will receive notifications only for messages that @mention them by default
+	 * Only messages that mention the user will trigger notifications
 	 */
 	OnlyMentions = 1,
 }
 
-export const DefaultMessageNotificationLevelEnum = z.nativeEnum(DefaultMessageNotificationLevel);
+export const DefaultMessageNotificationLevelsEnum = z.nativeEnum(DefaultMessageNotificationLevels);
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/guild#guild-object-guild-structure}
  */
 export const GuildStructure = z.object({
 	/**
-	 * The guild id
+	 * Guild id
 	 */
 	id: Snowflake,
 	/**
-	 * The guild name
+	 * Guild name (2-100 characters, excluding trailing and leading whitespace)
 	 */
 	name: z.string().min(2).max(100),
 	/**
-	 * The icon hash
+	 * Icon hash
 	 */
 	icon: z.string().nullable(),
 	/**
@@ -793,39 +801,41 @@ export const GuildStructure = z.object({
 	 */
 	icon_hash: z.string().optional().nullable(),
 	/**
-	 * The splash hash
+	 * Splash hash
 	 */
 	splash: z.string().nullable(),
 	/**
-	 * The discovery splash hash
+	 * Discovery splash hash; only present for guilds with the "DISCOVERABLE" feature
 	 */
 	discovery_splash: z.string().nullable(),
 	/**
-	 * The owner of the guild
+	 * True if the user is the owner of the guild
 	 */
 	owner: z.boolean().optional(),
 	/**
-	 * The id of the owner
+	 * ID of owner
 	 */
 	owner_id: Snowflake,
 	/**
-	 * Total permissions for the user in the guild
+	 * Total permissions for the user in the guild (excludes overwrites and implicit permissions)
 	 */
 	permissions: z.string().optional(),
 	/**
-	 * Voice region id for the guild
+	 * Voice region id for the guild (deprecated)
+	 *
+	 * @deprecated
 	 */
 	region: z.string().optional().nullable(),
 	/**
-	 * Id of afk channel
+	 * ID of afk channel
 	 */
 	afk_channel_id: Snowflake.nullable(),
 	/**
-	 * Afk timeout in seconds
+	 * AFK timeout in seconds
 	 */
 	afk_timeout: Integer,
 	/**
-	 * Whether the server widget is enabled
+	 * True if the server widget is enabled
 	 */
 	widget_enabled: z.boolean().optional(),
 	/**
@@ -835,15 +845,15 @@ export const GuildStructure = z.object({
 	/**
 	 * Verification level required for the guild
 	 */
-	verification_level: VerificationLevelEnum,
+	verification_level: VerificationLevelsEnum,
 	/**
 	 * Default message notifications level
 	 */
-	default_message_notifications: DefaultMessageNotificationLevelEnum,
+	default_message_notifications: DefaultMessageNotificationLevelsEnum,
 	/**
 	 * Explicit content filter level
 	 */
-	explicit_content_filter: ExplicitContentFilterLevelEnum,
+	explicit_content_filter: ExplicitContentFilterLevelsEnum,
 	/**
 	 * Roles in the guild
 	 */
@@ -859,7 +869,7 @@ export const GuildStructure = z.object({
 	/**
 	 * Required MFA level for the guild
 	 */
-	mfa_level: MFALevelEnum,
+	mfa_level: MfaLevelsEnum,
 	/**
 	 * Application id of the guild creator if it is bot-created
 	 */
@@ -877,7 +887,7 @@ export const GuildStructure = z.object({
 	 */
 	rules_channel_id: Snowflake.nullable(),
 	/**
-	 * The maximum number of presences for the guild
+	 * The maximum number of presences for the guild (null is always returned, apart from the largest of guilds)
 	 */
 	max_presences: Integer.optional().nullable(),
 	/**
@@ -899,7 +909,7 @@ export const GuildStructure = z.object({
 	/**
 	 * Premium tier (Server Boost level)
 	 */
-	premium_tier: PremiumTierEnum,
+	premium_tier: PremiumTiersEnum,
 	/**
 	 * The number of boosts this guild currently has
 	 */
@@ -921,11 +931,11 @@ export const GuildStructure = z.object({
 	 */
 	max_stage_video_channel_users: Integer.optional(),
 	/**
-	 * Approximate number of members in this guild
+	 * Approximate number of members in this guild, returned from the GET /guilds/<id> and /users/@me/guilds endpoints when with_counts is true
 	 */
 	approximate_member_count: Integer.optional(),
 	/**
-	 * Approximate number of non-offline members in this guild
+	 * Approximate number of non-offline members in this guild, returned from the GET /guilds/<id> and /users/@me/guilds endpoints when with_counts is true
 	 */
 	approximate_presence_count: Integer.optional(),
 	/**
@@ -935,11 +945,11 @@ export const GuildStructure = z.object({
 	/**
 	 * Guild NSFW level
 	 */
-	nsfw_level: GuildNSFWLevelsEnum,
+	nsfw_level: GuildNsfwLevelsEnum,
 	/**
 	 * Custom guild stickers
 	 */
-	stickers: z.array(StickerStructure),
+	stickers: z.array(StickerStructure).optional(),
 	/**
 	 * Whether the guild has the boost progress bar enabled
 	 */
@@ -1012,7 +1022,7 @@ export const GuildScheduledEventEntityTypesEnum = z.nativeEnum(GuildScheduledEve
  */
 export enum GuildScheduledEventPrivacyLevel {
 	/**
-	 * the scheduled event is only accessible to guild members
+	 * The scheduled event is accessible to everyone
 	 */
 	GuildOnly = 2,
 }
@@ -1050,11 +1060,11 @@ export const GuildScheduledEventStructure = z.object({
 	/**
 	 * The time the scheduled event will start
 	 */
-	scheduled_start_time: ISO8601Timestamp,
+	scheduled_start_time: z.string(),
 	/**
 	 * The time the scheduled event will end, required if entity_type is EXTERNAL
 	 */
-	scheduled_end_time: ISO8601Timestamp.optional(),
+	scheduled_end_time: z.string().nullable(),
 	/**
 	 * The privacy level of the scheduled event
 	 */
@@ -1122,11 +1132,11 @@ export const GuildTemplateStructure = z.object({
 	/**
 	 * When this template was created
 	 */
-	created_at: ISO8601Timestamp,
+	created_at: z.string(),
 	/**
 	 * When this template was last synced to the source guild
 	 */
-	updated_at: ISO8601Timestamp,
+	updated_at: z.string(),
 	/**
 	 * The ID of the guild this template is based on
 	 */
@@ -1134,7 +1144,21 @@ export const GuildTemplateStructure = z.object({
 	/**
 	 * The guild snapshot this template contains
 	 */
-	serialized_source_guild: GuildStructure.partial(),
+	serialized_source_guild: GuildStructure.pick({
+		name: true,
+		description: true,
+		verification_level: true,
+		default_message_notifications: true,
+		explicit_content_filter: true,
+		preferred_locale: true,
+		afk_timeout: true,
+		roles: true,
+		// channels: true,
+		afk_channel_id: true,
+		system_channel_id: true,
+		system_channel_flags: true,
+		icon_hash: true,
+	}),
 	/**
 	 * Whether the template has unsynced changes
 	 */

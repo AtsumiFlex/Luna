@@ -1,11 +1,6 @@
 import { z } from "zod";
 
 /**
- * Enumeration of available locales for Discord.
- * These locales are used for setting language preferences in Discord.
- *
- * @example
- * const userLocale = Locales.EnglishUS;
  * @see {@link https://discord.com/developers/docs/reference#locales}
  */
 export enum Locales {
@@ -43,11 +38,4 @@ export enum Locales {
 	Vietnamese = "vi",
 }
 
-/**
- * Zod schema for locales enumeration.
- * This schema is used for validating {@link Locales} values.
- *
- * @example
- * const isValidLocale = LocalesEnum.safeParse(someLocale).success;
- */
 export const LocalesEnum = z.nativeEnum(Locales);

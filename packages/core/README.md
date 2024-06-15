@@ -1,3 +1,0 @@
-# Luna - CORE
-
-soon...

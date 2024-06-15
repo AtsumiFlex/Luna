@@ -1,13 +1,26 @@
 import { z } from "zod";
-import { Integer, ISO8601Timestamp, Snowflake } from "../globals/formats";
+import type { SnowflakeInfer } from "../globals/formats";
+import { Integer, Snowflake } from "../globals/formats";
 import { DiscordHeaders } from "../globals/headers";
 import type { ApplicationIntegrationTypes, ApplicationStructureInfer } from "./applications";
 import { ApplicationIntegrationTypesEnum, ApplicationStructure } from "./applications";
 import { EmojiStructure } from "./emojis";
 import { GuildMemberStructure } from "./guilds";
-import { InteractionTypesEnum } from "./interactions";
+import type {
+	ComponentStructureInfer,
+	MessageInteractionStructureInfer,
+	ResolvedDataStructureInfer,
+} from "./interactions";
+import {
+	ComponentStructure,
+	InteractionTypesEnum,
+	MessageInteractionStructure,
+	ResolvedDataStructure,
+} from "./interactions";
 import type { PollStructureInfer } from "./polls";
 import { PollStructure } from "./polls";
+import type { RoleStructureInfer } from "./roles";
+import { RoleStructure } from "./roles";
 import type { StickerItemStructureInfer, StickerStructureInfer } from "./stickers";
 import { StickerItemStructure, StickerStructure } from "./stickers";
 import type { UserStructureInfer } from "./users";
@@ -57,18 +70,6 @@ export enum ChannelTypes {
 	 * A voice channel for hosting events with an audience
 	 */
 	GuildStageVoice = 13,
-	/**
-	 * The channel in a hub containing the listed servers
-	 */
-	GuildDirectory = 14,
-	/**
-	 * Channel that can only contain threads
-	 */
-	GuildForum = 15,
-	/**
-	 * Channel that can only contain threads, similar to GUILD_FORUM channels
-	 */
-	GuildMedia = 16,
 }
 
 export const ChannelTypesEnum = z.nativeEnum(ChannelTypes);
@@ -78,19 +79,19 @@ export const ChannelTypesEnum = z.nativeEnum(ChannelTypes);
  */
 export const RoleSubscriptionDataStructure = z.object({
 	/**
-	 * The ID of the SKU and listing that the user is subscribed to.
+	 * The id of the sku and listing that the user is subscribed to
 	 */
 	role_subscription_listing_id: Snowflake,
 	/**
-	 * The name of the tier that the user is subscribed to.
+	 * The name of the tier that the user is subscribed to
 	 */
 	tier_name: z.string(),
 	/**
-	 * The cumulative number of months that the user has been subscribed for.
+	 * The cumulative number of months that the user has been subscribed for
 	 */
-	total_months_subscribed: Integer,
+	total_months_subscribed: z.number(),
 	/**
-	 * Whether this notification is for a renewal rather than a new purchase.
+	 * Whether this notification is for a renewal rather than a new purchase
 	 */
 	is_renewal: z.boolean(),
 });
@@ -101,8 +102,17 @@ export type RoleSubscriptionDataStructureInfer = z.infer<typeof RoleSubscription
  * @see {@link https://discord.com/developers/docs/resources/channel#allowed-mentions-object-allowed-mention-types}
  */
 export enum AllowedMentionTypes {
+	/**
+	 * Controls @everyone and @here mentions
+	 */
 	Everyone = "everyone",
+	/**
+	 * Controls role mentions
+	 */
 	Roles = "roles",
+	/**
+	 * Controls user mentions
+	 */
 	Users = "users",
 }
 
@@ -113,7 +123,7 @@ export const AllowedMentionTypesEnum = z.nativeEnum(AllowedMentionTypes);
  */
 export const AllowedMentionsStructure = z.object({
 	/**
-	 * An array of allowed mention types to parse from the content.
+	 * An array of allowed mention types to parse from the content
 	 */
 	parse: z.array(AllowedMentionTypesEnum),
 	/**
@@ -127,7 +137,7 @@ export const AllowedMentionsStructure = z.object({
 	/**
 	 * For replies, whether to mention the author of the message being replied to (default false)
 	 */
-	replied_user: z.boolean(),
+	replied_user: z.boolean().default(false),
 });
 
 export type AllowedMentionsStructureInfer = z.infer<typeof AllowedMentionsStructure>;
@@ -137,19 +147,19 @@ export type AllowedMentionsStructureInfer = z.infer<typeof AllowedMentionsStruct
  */
 export const ChannelMentionStructure = z.object({
 	/**
-	 * ID of the channel
+	 * id of the channel
 	 */
 	id: Snowflake,
 	/**
-	 * ID of the guild containing the channel
+	 * id of the guild containing the channel
 	 */
 	guild_id: Snowflake,
 	/**
-	 * The type of channel
+	 * the type of channel
 	 */
 	type: ChannelTypesEnum,
 	/**
-	 * The name of the channel
+	 * the name of the channel
 	 */
 	name: z.string(),
 });
@@ -173,7 +183,7 @@ export const AttachmentFlagsEnum = z.nativeEnum(AttachmentFlags);
  */
 export const AttachmentStructure = z.object({
 	/**
-	 * Attachment ID
+	 * Attachment id
 	 */
 	id: Snowflake,
 	/**
@@ -183,31 +193,31 @@ export const AttachmentStructure = z.object({
 	/**
 	 * Description for the file (max 1024 characters)
 	 */
-	description: z.string().optional(),
+	description: z.string().max(1_024).optional(),
 	/**
 	 * The attachment's media type
 	 */
-	content_type: DiscordHeaders.pick({ "Content-Type": true }).optional(),
+	content_type: DiscordHeaders.shape["Content-Type"].optional(),
 	/**
 	 * Size of file in bytes
 	 */
 	size: Integer,
 	/**
-	 * Source URL of file
+	 * Source url of file
 	 */
-	url: z.string().url(),
+	url: z.string(),
 	/**
-	 * A proxied URL of file
+	 * A proxied url of file
 	 */
-	proxy_url: z.string().url(),
+	proxy_url: z.string(),
 	/**
 	 * Height of file (if image)
 	 */
-	height: Integer.optional(),
+	height: Integer.optional().nullable(),
 	/**
 	 * Width of file (if image)
 	 */
-	width: Integer.optional(),
+	width: Integer.optional().nullable(),
 	/**
 	 * Whether this attachment is ephemeral
 	 */
@@ -222,8 +232,9 @@ export const AttachmentStructure = z.object({
 	waveform: z.string().optional(),
 	/**
 	 * Attachment flags combined as a bitfield
+	 * Remark: This should be a bigint, but it's not clear how to represent that in Zod
 	 */
-	flags: z.union([AttachmentFlagsEnum, z.bigint()]).optional(),
+	flags: z.union([z.bigint(), AttachmentFlagsEnum]).optional(),
 });
 
 export type AttachmentStructureInfer = z.infer<typeof AttachmentStructure>;
@@ -259,11 +270,11 @@ export const EmbedFooterStructure = z.object({
 	/**
 	 * URL of footer icon (only supports http(s) and attachments)
 	 */
-	icon_url: z.string().url().optional(),
+	icon_url: z.string().optional(),
 	/**
 	 * A proxied URL of footer icon
 	 */
-	proxy_icon_url: z.string().url().optional(),
+	proxy_icon_url: z.string().optional(),
 });
 
 export type EmbedFooterStructureInfer = z.infer<typeof EmbedFooterStructure>;
@@ -279,15 +290,15 @@ export const EmbedAuthorStructure = z.object({
 	/**
 	 * URL of the author
 	 */
-	url: z.string().url().optional(),
+	url: z.string().optional(),
 	/**
 	 * URL of the author icon (only supports http(s) and attachments)
 	 */
-	icon_url: z.string().url().optional(),
+	icon_url: z.string().optional(),
 	/**
-	 * A proxied URL of author icon
+	 * A proxied URL of the author icon
 	 */
-	proxy_icon_url: z.string().url().optional(),
+	proxy_icon_url: z.string().optional(),
 });
 
 export type EmbedAuthorStructureInfer = z.infer<typeof EmbedAuthorStructure>;
@@ -297,13 +308,13 @@ export type EmbedAuthorStructureInfer = z.infer<typeof EmbedAuthorStructure>;
  */
 export const EmbedProviderStructure = z.object({
 	/**
-	 * Name of the provider
+	 * Name of provider
 	 */
 	name: z.string().optional(),
 	/**
-	 * URL of the provider
+	 * URL of provider
 	 */
-	url: z.string().url().optional(),
+	url: z.string().optional(),
 });
 
 export type EmbedProviderStructureInfer = z.infer<typeof EmbedProviderStructure>;
@@ -315,11 +326,11 @@ export const EmbedImageStructure = z.object({
 	/**
 	 * Source url of image (only supports http(s) and attachments)
 	 */
-	url: z.string().url(),
+	url: z.string(),
 	/**
 	 * A proxied url of the image
 	 */
-	proxy_url: z.string().url().optional(),
+	proxy_url: z.string().optional(),
 	/**
 	 * Height of image
 	 */
@@ -339,11 +350,11 @@ export const EmbedVideoStructure = z.object({
 	/**
 	 * Source url of video
 	 */
-	url: z.string().url(),
+	url: z.string().optional(),
 	/**
 	 * A proxied url of the video
 	 */
-	proxy_url: z.string().url().optional(),
+	proxy_url: z.string().optional(),
 	/**
 	 * Height of video
 	 */
@@ -363,11 +374,11 @@ export const EmbedThumbnailStructure = z.object({
 	/**
 	 * Source url of thumbnail (only supports http(s) and attachments)
 	 */
-	url: z.string().url(),
+	url: z.string(),
 	/**
 	 * A proxied url of the thumbnail
 	 */
-	proxy_url: z.string().url().optional(),
+	proxy_url: z.string().optional(),
 	/**
 	 * Height of thumbnail
 	 */
@@ -417,27 +428,27 @@ export const EmbedTypesEnum = z.nativeEnum(EmbedTypes);
  */
 export const EmbedStructure = z.object({
 	/**
-	 * Title of the embed
+	 * The title of the embed
 	 */
 	title: z.string().max(256).optional(),
 	/**
-	 * Type of embed
+	 * The type of the embed
 	 */
 	type: EmbedTypesEnum.optional(),
 	/**
-	 * Description of the embed
+	 * The description of the embed
 	 */
 	description: z.string().max(4_096).optional(),
 	/**
-	 * URL of the embed
+	 * The url of the embed
 	 */
-	url: z.string().url().optional(),
+	url: z.string().optional(),
 	/**
-	 * Timestamp of the embed content
+	 * The timestamp of the embed content
 	 */
-	timestamp: ISO8601Timestamp.optional(),
+	timestamp: z.string().optional(),
 	/**
-	 * Color code of the embed
+	 * The color code of the embed
 	 */
 	color: Integer.optional(),
 	/**
@@ -481,7 +492,7 @@ export const ForumTagStructure = z.object({
 	 */
 	id: Snowflake,
 	/**
-	 * The name of the tag (0-20 characters)
+	 * The name of the tag
 	 */
 	name: z.string().min(0).max(20),
 	/**
@@ -523,23 +534,23 @@ export const ThreadMemberStructure = z.object({
 	/**
 	 * ID of the thread
 	 */
-	id: Snowflake,
+	id: Snowflake.optional(),
 	/**
 	 * ID of the user
 	 */
-	user_id: Snowflake,
+	user_id: Snowflake.optional(),
 	/**
 	 * Time the user last joined the thread
 	 */
-	join_timestamp: ISO8601Timestamp,
+	join_timestamp: z.string(),
 	/**
 	 * Any user-thread settings, currently only used for notifications
 	 */
-	flags: Integer,
+	flags: Integer.optional(),
 	/**
 	 * Additional information about the user
 	 */
-	member: GuildMemberStructure,
+	member: GuildMemberStructure.optional(),
 });
 
 export type ThreadMemberStructureInfer = z.infer<typeof ThreadMemberStructure>;
@@ -559,7 +570,7 @@ export const ThreadMetadataStructure = z.object({
 	/**
 	 * Timestamp when the thread's archive status was last changed, used for calculating recent activity
 	 */
-	archive_timestamp: ISO8601Timestamp,
+	archive_timestamp: z.string(),
 	/**
 	 * Whether the thread is locked; when a thread is locked, only users with MANAGE_THREADS can unarchive it
 	 */
@@ -571,7 +582,7 @@ export const ThreadMetadataStructure = z.object({
 	/**
 	 * Timestamp when the thread was created; only populated for threads created after 2022-01-09
 	 */
-	create_timestamp: ISO8601Timestamp.nullable(),
+	create_timestamp: z.string().optional().nullable(),
 });
 
 export type ThreadMetadataStructureInfer = z.infer<typeof ThreadMetadataStructure>;
@@ -581,19 +592,19 @@ export type ThreadMetadataStructureInfer = z.infer<typeof ThreadMetadataStructur
  */
 export const OverwriteStructure = z.object({
 	/**
-	 * Role or user ID
+	 * role or user id
 	 */
 	id: Snowflake,
 	/**
-	 * Either 0 (role) or 1 (member)
+	 * either 0 (role) or 1 (member)
 	 */
 	type: z.union([z.literal(0), z.literal(1)]),
 	/**
-	 * Permission bit set
+	 * permission bit set
 	 */
 	allow: z.string(),
 	/**
-	 * Permission bit set
+	 * permission bit set
 	 */
 	deny: z.string(),
 });
@@ -637,13 +648,13 @@ export const ReactionStructure = z.object({
 	 */
 	me_burst: z.boolean(),
 	/**
-	 * emoji information
+	 * Emoji information
 	 */
-	emoji: EmojiStructure.partial().optional(),
+	emoji: EmojiStructure.partial(),
 	/**
 	 * HEX colors used for super reaction
 	 */
-	burst_colors: z.array(z.string()).optional(),
+	burst_colors: z.array(z.string()),
 });
 
 export type ReactionStructureInfer = z.infer<typeof ReactionStructure>;
@@ -653,11 +664,11 @@ export type ReactionStructureInfer = z.infer<typeof ReactionStructure>;
  */
 export const FollowedChannelStructure = z.object({
 	/**
-	 * Source channel id
+	 * The source channel id
 	 */
 	channel_id: Snowflake,
 	/**
-	 * Created target webhook id
+	 * The created target webhook id
 	 */
 	webhook_id: Snowflake,
 });
@@ -669,19 +680,19 @@ export type FollowedChannelStructureInfer = z.infer<typeof FollowedChannelStruct
  */
 export const MessageReferenceStructure = z.object({
 	/**
-	 * id of the originating message
+	 * ID of the originating message
 	 */
 	message_id: Snowflake.optional(),
 	/**
-	 * id of the originating message's channel
+	 * ID of the originating message's channel
 	 */
 	channel_id: Snowflake.optional(),
 	/**
-	 * id of the originating message's guild
+	 * ID of the originating message's guild
 	 */
 	guild_id: Snowflake.optional(),
 	/**
-	 * when sending, whether to error if the referenced message doesn't exist instead of sending as a normal (non-reply) message, default true
+	 * When sending, whether to error if the referenced message doesn't exist instead of sending as a normal (non-reply) message, default true
 	 */
 	fail_if_not_exists: z.boolean().optional(),
 });
@@ -693,23 +704,23 @@ export type MessageReferenceStructureInfer = z.infer<typeof MessageReferenceStru
  */
 export const MessageCallStructure = z.object({
 	/**
-	 * array of user object ids that participated in the call
+	 * Array of user object ids that participated in the call
 	 */
-	participants: z.array(Snowflake),
+	participants: z.array(UserStructure.pick({ id: true })),
 	/**
-	 * time when call ended
+	 * Time when call ended
 	 */
-	ended_timestamp: ISO8601Timestamp.optional(),
+	ended_timestamp: z.string().optional().nullable(),
 });
 
 export type MessageCallStructureInfer = z.infer<typeof MessageCallStructure>;
 
 export type MessageInteractionMetadataStructureInfer = {
-	authorizing_integration_owners: Record<string, ApplicationIntegrationTypes>;
-	id: string;
-	interacted_message_id?: string;
-	original_response_message_id?: string;
-	triggering_interaction_metadata?: MessageInteractionMetadataStructureInfer;
+	authorizing_integration_owners: Record<ApplicationIntegrationTypes, SnowflakeInfer>;
+	id: SnowflakeInfer;
+	interacted_message_id?: SnowflakeInfer | null;
+	original_response_message_id?: SnowflakeInfer | null;
+	triggering_interaction_metadata?: MessageInteractionMetadataStructureInfer | null;
 	type: number;
 	user: UserStructureInfer;
 };
@@ -733,7 +744,7 @@ export const MessageInteractionMetadataStructure: z.ZodType<MessageInteractionMe
 	/**
 	 * IDs for installation context(s) related to an interaction
 	 */
-	authorizing_integration_owners: z.record(z.string(), ApplicationIntegrationTypesEnum),
+	authorizing_integration_owners: z.record(ApplicationIntegrationTypesEnum, Snowflake),
 	/**
 	 * ID of the original response message, present only on follow-up messages
 	 */
@@ -817,11 +828,11 @@ export const MessageActivityTypesEnum = z.nativeEnum(MessageActivityTypes);
  */
 export const MessageActivityStructure = z.object({
 	/**
-	 * type of message activity
+	 * Type of message activity
 	 */
 	type: MessageActivityTypesEnum,
 	/**
-	 * party_id from a Rich Presence event
+	 * Party ID from a Rich Presence event
 	 */
 	party_id: z.string().optional(),
 });
@@ -863,6 +874,11 @@ export enum MessageTypes {
 	StageSpeaker = 29,
 	StageTopic = 31,
 	GuildApplicationPremiumSubscription = 32,
+	GuildIncidentAlertModeEnabled = 36,
+	GuildIncidentAlertModeDisabled = 37,
+	GuildIncidentReportRaid = 38,
+	GuildIncidentReportFalseAlarm = 39,
+	PurchaseNotification = 44,
 }
 
 export const MessageTypesEnum = z.nativeEnum(MessageTypes);
@@ -966,11 +982,11 @@ export const ChannelStructure = z.object({
 	/**
 	 * The name of the channel (1-100 characters)
 	 */
-	name: z.string().min(1).max(100).optional().nullable(),
+	name: z.string().max(100).optional().nullable(),
 	/**
 	 * The channel topic (0-4096 characters for GUILD_FORUM and GUILD_MEDIA channels, 0-1024 characters for all others)
 	 */
-	topic: z.string().min(0).max(4_096).optional().nullable(),
+	topic: z.string().max(4_096).optional().nullable(),
 	/**
 	 * Whether the channel is nsfw
 	 */
@@ -990,7 +1006,7 @@ export const ChannelStructure = z.object({
 	/**
 	 * Amount of seconds a user has to wait before sending another message (0-21600); bots, as well as users with the permission manage_messages or manage_channel, are unaffected
 	 */
-	rate_limit_per_user: Integer.min(0).max(21_600).optional(),
+	rate_limit_per_user: Integer.optional(),
 	/**
 	 * The recipients of the DM
 	 */
@@ -1018,7 +1034,7 @@ export const ChannelStructure = z.object({
 	/**
 	 * When the last pinned message was pinned. This may be null in events such as GUILD_CREATE when a message is not pinned.
 	 */
-	last_pin_timestamp: ISO8601Timestamp.optional().nullable(),
+	last_pin_timestamp: z.string().optional().nullable(),
 	/**
 	 * Voice region id for the voice channel, automatic when set to null
 	 */
@@ -1028,7 +1044,7 @@ export const ChannelStructure = z.object({
 	 */
 	video_quality_mode: VideoQualityModesEnum.optional(),
 	/**
-	 * Number of messages (not including the initial message or deleted messages) in a thread.
+	 * Number of messages (not including the initial message or deleted messages) in a thread
 	 */
 	message_count: Integer.optional(),
 	/**
@@ -1053,8 +1069,9 @@ export const ChannelStructure = z.object({
 	permissions: z.string().optional(),
 	/**
 	 * Channel flags combined as a bitfield
+	 * Remark: This should be a bigint, but it's not clear how to represent that in Zod
 	 */
-	flags: z.union([ChannelFlagsEnum, z.bigint()]).optional(),
+	flags: z.union([z.bigint(), ChannelFlagsEnum]).optional(),
 	/**
 	 * Number of messages ever sent in a thread, it's similar to message_count on message creation, but will not decrement the number when a message is deleted
 	 */
@@ -1078,7 +1095,7 @@ export const ChannelStructure = z.object({
 	/**
 	 * The default sort order type used to order posts in GUILD_FORUM and GUILD_MEDIA channels. Defaults to null, which indicates a preferred sort order hasn't been set by a channel admin
 	 */
-	default_sort_order: SortOrderTypesEnum.optional(),
+	default_sort_order: Integer.optional().nullable(),
 	/**
 	 * The default forum layout view used to display posts in GUILD_FORUM channels. Defaults to 0, which indicates a layout view has not been set by a channel admin
 	 */
@@ -1088,48 +1105,47 @@ export const ChannelStructure = z.object({
 export type ChannelStructureInfer = z.infer<typeof ChannelStructure>;
 
 export type MessageStructureInfer = {
-	activity?: MessageActivityStructureInfer;
-	application?: ApplicationStructureInfer;
-	application_id?: string;
-	attachments: AttachmentStructureInfer[];
-	author: UserStructureInfer;
-	call?: MessageCallStructureInfer;
-	channel_id: string;
-	components?: unknown[];
-	content: string | null;
-	edited_timestamp?: string;
-	embeds: EmbedStructureInfer[];
-	flags?: MessageFlags | bigint;
-	id: string;
-	interaction?: unknown;
-	interaction_metadata?: MessageInteractionMetadataStructureInfer;
-	mention_channels?: ChannelMentionStructureInfer[];
-	mention_everyone: boolean;
-	mention_roles: string[];
-	mentions: UserStructureInfer[];
-	message_reference?: MessageReferenceStructureInfer;
-	nonce?: number | string;
-	pinned: boolean;
-	poll?: PollStructureInfer;
-	position?: number;
-	reactions?: ReactionStructureInfer[];
-	referenced_message?: MessageStructureInfer | null;
-	resolved?: unknown;
-	role_subscription_data?: RoleSubscriptionDataStructureInfer;
-	sticker_items?: StickerItemStructureInfer[];
-	stickers?: StickerStructureInfer[];
-	thread?: unknown;
-	timestamp: string;
-	tts: boolean;
-	type: number;
-	webhook_id?: string;
+	activity?: z.ZodType<MessageActivityStructureInfer>;
+	application?: z.ZodType<ApplicationStructureInfer | null>;
+	application_id?: z.ZodType<SnowflakeInfer | null>;
+	attachments: z.ZodType<AttachmentStructureInfer[]>;
+	author: z.ZodType<UserStructureInfer>;
+	call?: z.ZodType<MessageCallStructureInfer | null>;
+	channel_id: z.ZodType<SnowflakeInfer>;
+	components?: z.ZodType<ComponentStructureInfer | null>;
+	content: z.ZodType<string>;
+	edited_timestamp?: z.ZodType<string | null>;
+	embeds: z.ZodType<EmbedStructureInfer[]>;
+	flags?: z.ZodType<MessageFlags | bigint>;
+	id: z.ZodType<SnowflakeInfer>;
+	interaction?: z.ZodType<MessageInteractionStructureInfer | null>;
+	interaction_metadata?: z.ZodType<MessageInteractionMetadataStructureInfer | null>;
+	mention_channels?: z.ZodType<ChannelMentionStructureInfer[] | null>;
+	mention_everyone: z.ZodType<boolean>;
+	mention_roles: z.ZodType<RoleStructureInfer[]>;
+	mentions: z.ZodType<UserStructureInfer[]>;
+	message_reference?: z.ZodType<MessageReferenceStructureInfer | null>;
+	nonce?: z.ZodType<number | string | null>;
+	pinned: z.ZodType<boolean>;
+	poll?: z.ZodType<PollStructureInfer | null>;
+	position?: z.ZodType<number | null>;
+	reactions?: z.ZodType<ReactionStructureInfer[] | null>;
+	referenced_message?: z.ZodType<MessageStructureInfer | null>;
+	resolved?: z.ZodType<ResolvedDataStructureInfer | null>;
+	role_subscription_data?: z.ZodType<RoleSubscriptionDataStructureInfer | null>;
+	sticker_items?: z.ZodType<StickerItemStructureInfer | null>;
+	stickers?: z.ZodType<StickerStructureInfer | null>;
+	thread?: z.ZodType<ChannelStructureInfer | null>;
+	timestamp: z.ZodType<string>;
+	tts: z.ZodType<boolean>;
+	type: z.ZodType<number>;
+	webhook_id?: z.ZodType<SnowflakeInfer | null>;
 };
 
 /**
  * @see {@link https://discord.com/developers/docs/resources/channel#message-object-message-structure}
  */
-// TODO: A regler
-export const MessageStructure: z.ZodType<any> = z.object({
+export const MessageStructure: z.ZodObject<MessageStructureInfer> = z.object({
 	/**
 	 * ID of the message
 	 */
@@ -1139,21 +1155,21 @@ export const MessageStructure: z.ZodType<any> = z.object({
 	 */
 	channel_id: Snowflake,
 	/**
-	 * Author of this message
+	 * The author of this message
 	 */
 	author: UserStructure,
 	/**
 	 * Contents of the message
 	 */
-	content: z.string().nullable(),
+	content: z.string(),
 	/**
 	 * When this message was sent
 	 */
-	timestamp: ISO8601Timestamp,
+	timestamp: z.string(),
 	/**
 	 * When this message was edited (or null if never)
 	 */
-	edited_timestamp: ISO8601Timestamp.optional(),
+	edited_timestamp: z.string().optional(),
 	/**
 	 * Whether this was a TTS message
 	 */
@@ -1169,7 +1185,7 @@ export const MessageStructure: z.ZodType<any> = z.object({
 	/**
 	 * Roles specifically mentioned in this message
 	 */
-	mention_roles: z.array(Snowflake),
+	mention_roles: z.array(RoleStructure.pick({ id: true })),
 	/**
 	 * Channels specifically mentioned in this message
 	 */
@@ -1209,53 +1225,52 @@ export const MessageStructure: z.ZodType<any> = z.object({
 	/**
 	 * Sent with Rich Presence-related chat embeds
 	 */
-	application: z.lazy(() => ApplicationStructure.partial()),
+	application: ApplicationStructure.partial().optional(),
 	/**
 	 * If the message is an Interaction or application-owned webhook, this is the id of the application
 	 */
-	application_id: Snowflake,
+	application_id: Snowflake.optional(),
 	/**
 	 * Data showing the source of a crosspost, channel follow add, pin, or reply message
 	 */
 	message_reference: MessageReferenceStructure.optional(),
 	/**
 	 * Message flags combined as a bitfield
+	 * Remark: This should be a bigint, but it's not clear how to represent that in Zod
 	 */
-	flags: z.union([MessageFlagsEnum, z.bigint()]).optional(),
+	flags: z.union([z.bigint(), MessageFlagsEnum]).optional(),
 	/**
 	 * The message associated with the message_reference
 	 */
-	referenced_message: z.lazy(() => MessageStructure).optional().nullable(),
+	referenced_message: z.lazy(() => MessageStructure).optional(),
 	/**
 	 * In preview. Sent if the message is sent as a result of an interaction
 	 */
 	interaction_metadata: MessageInteractionMetadataStructure.optional(),
 	/**
-	 * TODO: Deprecated in favor of interaction_metadata; sent if the message is a response to an interaction
+	 * Deprecated in favor of interaction_metadata; sent if the message is a response to an interaction
 	 *
 	 * @deprecated
 	 */
-	interaction: z.unknown().optional(),
+	interaction: MessageInteractionStructure.optional(),
 	/**
-	 * TODO: The thread that was started from this message, includes thread member object
+	 * The thread that was started from this message, includes thread member object
 	 */
-	thread: z.unknown().optional(),
+	thread: ChannelStructure.optional(),
 	/**
-	 * TODO: Sent if the message contains components like buttons, action rows, or other interactive components
+	 * Sent if the message contains components like buttons, action rows, or other interactive components
 	 */
-	components: z.array(z.unknown()).optional(),
+	components: ComponentStructure.optional(),
 	/**
 	 * Sent if the message contains stickers
 	 */
-	sticker_items: z.array(StickerItemStructure).optional(),
+	sticker_items: StickerItemStructure.optional(),
 	/**
 	 * Deprecated the stickers sent with the message
-	 *
-	 * @deprecated
 	 */
-	stickers: z.array(StickerStructure).optional(),
+	stickers: StickerStructure.optional(),
 	/**
-	 * A generally increasing integer that represents the approximate position of the message in a thread
+	 * A generally increasing integer (there may be gaps or duplicates) that represents the approximate position of the message in a thread, it can be used to estimate the relative position of the message in a thread in company with total_message_sent on parent thread
 	 */
 	position: Integer.optional(),
 	/**
@@ -1263,9 +1278,9 @@ export const MessageStructure: z.ZodType<any> = z.object({
 	 */
 	role_subscription_data: RoleSubscriptionDataStructure.optional(),
 	/**
-	 * TODO: data for users, members, channels, and roles in the message's auto-populated select menus
+	 * Data for users, members, channels, and roles in the message's auto-populated select menus
 	 */
-	resolved: z.unknown().optional(),
+	resolved: ResolvedDataStructure.optional(),
 	/**
 	 * A poll!
 	 */

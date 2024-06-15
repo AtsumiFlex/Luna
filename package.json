@@ -1,37 +1,21 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@lunajs/monorepo",
-  "license": "AGPL-3.0-only",
-  "readme": "README.md",
-  "packageManager": "pnpm@9.2.0",
-  "description": "Welcome to Luna, a next-generation Discord bot built with the latest technologies.",
-  "author": {
-    "name": "AtsumiFlex",
-    "url": "https://github.com/AtsumiFlex"
-  },
-  "bugs": {
-    "url": "https://github.com/AtsumiFlex/luna.js/issues"
-  },
-  "repository": {
-    "url": "https://github.com/AtsumiFlex/luna.js.git",
-    "type": "git"
-  },
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "test": "turbo run test",
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "test": "turbo test",
     "prepare": "husky"
   },
   "devDependencies": {
-    "@lunajs/eslint-config": "workspace:*",
-    "@lunajs/ts-config": "workspace:*",
     "husky": "^9.0.11",
     "turbo": "latest",
     "typescript": "^5.4.5"
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "packageManager": "pnpm@9.2.0+sha512.98a80fd11c2e7096747762304106432b3ddc67dcf54b5a8c01c93f68a2cd5e05e6821849522a06fb76284d41a2660d5e334f2ee3bbf29183bf2e739b1dafa771"
 }

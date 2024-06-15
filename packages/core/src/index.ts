@@ -1,5 +1,12 @@
+/**
+ * TODO: TSDoc à compléter pour les dossier suivants :
+ * - ./globals/*
+ * - ./libs/*
+ * - ./structures/*
+ */
+
 // ./globals/*
-export * from "./globals/api";
+export * from "./globals/apis";
 export * from "./globals/formats";
 export * from "./globals/headers";
 export * from "./globals/locales";
@@ -8,28 +15,18 @@ export * from "./globals/locales";
 export * from "./libs/oauth2";
 export * from "./libs/opcodes";
 export * from "./libs/permissions";
-export * from "./libs/snowflakes";
 
 // ./structures/*
 export * from "./structures/applications";
-export * from "./structures/audits";
-/**
- * TODO: Add TSDoc to channels.ts
- */
 export * from "./structures/channels";
 export * from "./structures/emojis";
 export * from "./structures/entitlements";
-/**
- * TODO: Add TSDoc to guilds.ts
- */
 export * from "./structures/guilds";
-/**
- * TODO: Add TSDoc to interactions.ts
- */
 export * from "./structures/interactions";
 export * from "./structures/invites";
 export * from "./structures/moderations";
 export * from "./structures/polls";
+export * from "./structures/rates";
 export * from "./structures/roles";
 export * from "./structures/skus";
 export * from "./structures/stages";
