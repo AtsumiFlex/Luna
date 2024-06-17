@@ -18,6 +18,7 @@ export * from "./libs/permissions";
 
 // ./structures/*
 export * from "./structures/applications";
+export * from "./structures/audits";
 export * from "./structures/channels";
 export * from "./structures/emojis";
 export * from "./structures/entitlements";

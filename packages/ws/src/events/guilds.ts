@@ -1,10 +1,16 @@
 import {
-	AvatarDecorationDataStructure, ChannelStructure, EmojiStructure,
-	GuildMemberStructure, GuildScheduledEventStructure,
+	AvatarDecorationDataStructure,
+	ChannelStructure,
+	EmojiStructure,
+	GuildMemberStructure,
+	GuildScheduledEventStructure,
 	Integer,
 	RoleStructure,
-	Snowflake, StageInstanceStructure, StickerStructure,
-	UserStructure, VoiceStateStructure,
+	Snowflake,
+	StageInstanceStructure,
+	StickerStructure,
+	UserStructure,
+	VoiceStateStructure,
 } from "@lunajs/core";
 import { z } from "zod";
 import { PresenceUpdateFields } from "./presences";
@@ -80,6 +86,22 @@ export const GuildRoleUpdateFields = z.object({
 });
 
 export type GuildRoleUpdateFieldsInfer = z.infer<typeof GuildRoleUpdateFields>;
+
+/**
+ * @see {@link https://discord.com/developers/docs/topics/gateway-events#guild-role-create-guild-role-create-event-fields}
+ */
+export const GuildRoleCreateFields = z.object({
+	/**
+	 * ID of the guild
+	 */
+	guild_id: Snowflake,
+	/**
+	 * Role that was CREATED
+	 */
+	role: RoleStructure,
+});
+
+export type GuildRoleCreateFieldsInfer = z.infer<typeof GuildRoleCreateFields>;
 
 /**
  * @see {@link https://discord.com/developers/docs/topics/gateway-events#guild-members-chunk-guild-members-chunk-event-fields}
