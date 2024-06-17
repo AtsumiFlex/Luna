@@ -775,7 +775,7 @@ export const ResolvedDataStructure = z.object({
 	/**
 	 * Map of Snowflakes to partial messages objects
 	 */
-	messages: z.map(Snowflake, MessageStructure.partial()).optional(),
+	messages: z.map(Snowflake, z.lazy(() => MessageStructure.partial())).optional(),
 	/**
 	 * Map of Snowflakes to attachment objects
 	 */

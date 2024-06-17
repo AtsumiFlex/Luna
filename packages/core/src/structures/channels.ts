@@ -1131,7 +1131,7 @@ export type MessageStructureInfer = {
 	position?: z.ZodType<number | null>;
 	reactions?: z.ZodType<ReactionStructureInfer[] | null>;
 	referenced_message?: z.ZodType<MessageStructureInfer | null>;
-	resolved?: z.ZodType<ResolvedDataStructureInfer | null>;
+	resolved?: z.ZodLazy<z.ZodType<ResolvedDataStructureInfer | null>>;
 	role_subscription_data?: z.ZodType<RoleSubscriptionDataStructureInfer | null>;
 	sticker_items?: z.ZodType<StickerItemStructureInfer | null>;
 	stickers?: z.ZodType<StickerStructureInfer | null>;
@@ -1280,7 +1280,7 @@ export const MessageStructure: z.ZodObject<MessageStructureInfer> = z.object({
 	/**
 	 * Data for users, members, channels, and roles in the message's auto-populated select menus
 	 */
-	resolved: ResolvedDataStructure.optional(),
+	resolved: z.lazy(() => ResolvedDataStructure).optional(),
 	/**
 	 * A poll!
 	 */

@@ -23,8 +23,10 @@ export * from "./events/webhooks";
 // ./globals/*
 export * from "./globals/events";
 export * from "./globals/intents";
+export * from "./globals/shards";
 
 // ./other/*
+export * from "./other/connection";
 export * from "./other/guilds";
 export * from "./other/identity";
 export * from "./other/payload";
