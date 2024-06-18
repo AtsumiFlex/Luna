@@ -550,7 +550,7 @@ export const ThreadMemberStructure = z.object({
 	/**
 	 * Additional information about the user
 	 */
-	member: GuildMemberStructure.optional(),
+	member: z.lazy(() => GuildMemberStructure.optional()),
 });
 
 export type ThreadMemberStructureInfer = z.infer<typeof ThreadMemberStructure>;
@@ -1225,7 +1225,7 @@ export const MessageStructure: z.ZodObject<MessageStructureInfer> = z.object({
 	/**
 	 * Sent with Rich Presence-related chat embeds
 	 */
-	application: ApplicationStructure.partial().optional(),
+	application: z.lazy(() => ApplicationStructure.partial()).optional(),
 	/**
 	 * If the message is an Interaction or application-owned webhook, this is the id of the application
 	 */

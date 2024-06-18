@@ -594,7 +594,7 @@ export const InteractionCallDataStructure = z.object({
 	/**
 	 * The allowed mentions for the message
 	 */
-	allowed_mentions: AllowedMentionsStructure.optional(),
+	allowed_mentions: z.lazy(() => AllowedMentionsStructure).optional(),
 	/**
 	 * The flags for the message
 	 * REMARK: This is a bitfield, but we don't have a way to represent that in Zod
@@ -607,7 +607,7 @@ export const InteractionCallDataStructure = z.object({
 	/**
 	 * The attachments for the message
 	 */
-	attachments: z.array(AttachmentStructure.partial()).optional(),
+	attachments: z.array(z.lazy(() => AttachmentStructure.partial())).optional(),
 	/**
 	 * The poll for the message
 	 */
@@ -695,7 +695,7 @@ export const MessageInteractionStructure = z.object({
 	/**
 	 * Member who invoked the interaction in the guild
 	 */
-	member: GuildMemberStructure.partial().optional(),
+	member: z.lazy(() => GuildMemberStructure.partial()).optional(),
 });
 
 export type MessageInteractionStructureInfer = z.infer<typeof MessageInteractionStructure>;
@@ -745,7 +745,7 @@ export const ResolvedDataStructure = z.object({
 	/**
 	 * Map of Snowflakes to partial member objects
 	 */
-	members: z.map(Snowflake, GuildMemberStructure.pick({
+	members: z.map(Snowflake, z.lazy(() => GuildMemberStructure.pick({
 		premium_since: true,
 		nick: true,
 		avatar: true,
@@ -756,7 +756,7 @@ export const ResolvedDataStructure = z.object({
 		pending: true,
 		permissions: true,
 		roles: true,
-	})).optional(),
+	}))).optional(),
 	/**
 	 * Map of Snowflakes to role objects
 	 */
@@ -764,14 +764,14 @@ export const ResolvedDataStructure = z.object({
 	/**
 	 * Map of Snowflakes to partial channel objects
 	 */
-	channels: z.map(Snowflake, ChannelStructure.pick({
+	channels: z.map(Snowflake, z.lazy(() => ChannelStructure.pick({
 		id: true,
 		name: true,
 		type: true,
 		permissions: true,
 		thread_metadata: true,
 		parent_id: true,
-	})).optional(),
+	}))).optional(),
 	/**
 	 * Map of Snowflakes to partial messages objects
 	 */
@@ -896,7 +896,7 @@ export const InteractionStructure = z.object({
 	/**
 	 * Guild that the interaction was sent from
 	 */
-	guild: GuildStructure.partial().optional(),
+	guild: z.lazy(() => GuildStructure.partial()).optional(),
 	/**
 	 * Guild that the interaction was sent from
 	 */
@@ -904,7 +904,7 @@ export const InteractionStructure = z.object({
 	/**
 	 * Channel that the interaction was sent from
 	 */
-	channel: ChannelStructure.partial().optional(),
+	channel: z.lazy(() => ChannelStructure.partial()).optional(),
 	/**
 	 * Channel that the interaction was sent from
 	 */
@@ -912,7 +912,7 @@ export const InteractionStructure = z.object({
 	/**
 	 * Guild member data for the invoking user, including permissions
 	 */
-	member: GuildMemberStructure.optional(),
+	member: z.lazy(() => GuildMemberStructure.optional()),
 	/**
 	 * User object for the invoking user, if invoked in a DM
 	 */
@@ -928,7 +928,7 @@ export const InteractionStructure = z.object({
 	/**
 	 * For components, the message they were attached to
 	 */
-	message: MessageStructure.optional(),
+	message: z.lazy(() => MessageStructure.optional()),
 	/**
 	 * Bitwise set of permissions the app has in the source location of the interaction
 	 */

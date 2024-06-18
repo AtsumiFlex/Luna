@@ -91,7 +91,7 @@ export const ConnectionStructure = z.object({
 	/**
 	 * An array of partial server integrations
 	 */
-	integrations: z.array(IntegrationStructure.partial()).optional(),
+	integrations: z.array(z.lazy(() => IntegrationStructure.partial())).optional(),
 	/**
 	 * Whether the connection is verified
 	 */
