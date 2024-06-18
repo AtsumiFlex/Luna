@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@lunajs/rest",
+  "name": "lunajs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -9,10 +9,12 @@
     "lint": "eslint . --ext .ts"
   },
   "dependencies": {
+    "@lunajs/cache": "workspace:*",
     "@lunajs/core": "workspace:*",
+    "@lunajs/ws": "workspace:*",
     "eventemitter3": "^5.0.1",
     "tslib": "^2.6.3",
-    "undici": "^6.19.0",
+    "undici": "^6.19.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {

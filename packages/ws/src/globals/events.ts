@@ -4,6 +4,7 @@ import type {
 	AutoModerationRuleStructureInfer,
 	ChannelStructureInfer,
 	EntitlementStructureInfer,
+	GatewayOpcodes,
 	GuildMemberStructureInfer,
 	GuildScheduledEventStructureInfer,
 	GuildStructureInfer,
@@ -146,10 +147,10 @@ export type GatewayReceiveEvents = {
  * @see {@link https://discord.com/developers/docs/topics/gateway-events#send-events}
  */
 export type GatewaySendEvents = {
-	HEARTBEAT: null;
-	IDENTIFY: GatewayIdentifyStructureInfer;
-	REQUEST_GUILD_MEMBERS: GatewayRequestGuildMembersStructureInfer;
-	RESUME: GatewayResumeStructureInfer;
-	UPDATE_PRESENCE: GatewayPresenceUpdateStructureInfer;
-	UPDATE_VOICE_STATE: GatewayVoiceStateUpdateStructureInfer;
+	[GatewayOpcodes.Heartbeat]: number | null;
+	[GatewayOpcodes.Identify]: GatewayIdentifyStructureInfer;
+	[GatewayOpcodes.RequestGuildMembers]: GatewayRequestGuildMembersStructureInfer;
+	[GatewayOpcodes.Resume]: GatewayResumeStructureInfer;
+	[GatewayOpcodes.PresenceUpdate]: GatewayPresenceUpdateStructureInfer;
+	[GatewayOpcodes.VoiceStateUpdate]: GatewayVoiceStateUpdateStructureInfer;
 };

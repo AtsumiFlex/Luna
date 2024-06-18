@@ -22,6 +22,7 @@ export * from "./events/webhooks";
 
 // ./globals/*
 export * from "./globals/events";
+export * from "./globals/gateway";
 export * from "./globals/intents";
 export * from "./globals/shards";
 
