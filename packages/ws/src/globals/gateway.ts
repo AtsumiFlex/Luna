@@ -87,6 +87,16 @@ export class Gateway extends EventEmitter<GatewayReceiveEvents> {
 		this.emit("OPEN");
 	}
 
+	private onClose(code: number, reason: Buffer): void {
+		this.emit("DEBUG", `[WS] Disconnected from Gateway with code: ${code}, reason: ${reason.toString()}`);
+		this.emit("CLOSE", code, reason);
+		this.cleanup();
+	}
+
+	private onError(error: Error): void {
+		this.emit("ERROR", error);
+	}
+
 	private onMessage(data: WebSocket.Data): void {
 		if (this.options.compress === "zlib-stream" && this.inflate) {
 			this.inflate.write(data as Buffer, () => {
@@ -174,16 +184,6 @@ export class Gateway extends EventEmitter<GatewayReceiveEvents> {
 			this.emit("DEBUG", "[WS] Sending heartbeat...");
 			this.send(GatewayOpcodes.Heartbeat, this.lastSeq);
 		}, interval);
-	}
-
-	private onClose(code: number, reason: Buffer): void {
-		this.emit("DEBUG", `[WS] Disconnected from Gateway with code: ${code}, reason: ${reason.toString()}`);
-		this.emit("CLOSE", code, reason);
-		this.cleanup();
-	}
-
-	private onError(error: Error): void {
-		this.emit("ERROR", error);
 	}
 
 	private cleanup(): void {
