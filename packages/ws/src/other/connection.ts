@@ -12,7 +12,7 @@ export const GatewayConnectQuery = z.object({
 	/**
 	 * The encoding of received gateway packets
 	 */
-	encoding: z.union([z.literal("json"), z.literal("etf")]),
+	encoding: z.literal("json"),
 	/**
 	 * The optional transport compression of gateway packets
 	 */

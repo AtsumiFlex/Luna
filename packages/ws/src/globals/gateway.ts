@@ -3,6 +3,7 @@ import { clearInterval, setInterval } from "node:timers";
 import { URL } from "node:url";
 import { GatewayOpcodes, WEBSOCKET_GATEWAY_URL } from "@lunajs/core";
 import EventEmitter from "eventemitter3";
+import { Inflate } from "minizlib";
 import WebSocket from "ws";
 import type { z } from "zod";
 import { GatewayConnectQuery } from "../other/connection";
@@ -27,6 +28,8 @@ export class Gateway extends EventEmitter<GatewayReceiveEvents> {
 
 	private sessionId: string | null = null;
 
+	private inflate: Inflate | null = null;
+
 	public constructor(public readonly token: string, public readonly options: GatewayOptionsInfer) {
 		super();
 	}
@@ -45,6 +48,13 @@ export class Gateway extends EventEmitter<GatewayReceiveEvents> {
 	public connect(): void {
 		if (this.ws) {
 			this.ws.close();
+		}
+
+		if (this.options.compress) {
+			this.inflate = new Inflate({
+				level: 9,
+				encoding: "utf8",
+			});
 		}
 
 		this.emit("DEBUG", `[WS] Connecting to Gateway with URL: ${this.url.toString()}`);
@@ -66,8 +76,10 @@ export class Gateway extends EventEmitter<GatewayReceiveEvents> {
 			d: data,
 		};
 
-		this.emit("DEBUG", `[WS] Sending payload: ${JSON.stringify(payload)}`);
-		this.ws.send(JSON.stringify(payload));
+		const encodedPayload = JSON.stringify(payload);
+
+		this.emit("DEBUG", `[WS] Sending payload: ${encodedPayload}`);
+		this.ws.send(encodedPayload);
 	}
 
 	private onOpen(): void {
@@ -76,6 +88,19 @@ export class Gateway extends EventEmitter<GatewayReceiveEvents> {
 	}
 
 	private onMessage(data: WebSocket.Data): void {
+		if (this.options.compress === "zlib-stream" && this.inflate) {
+			this.inflate.write(data as Buffer, () => {
+				const decompressed = this.inflate?.read();
+				if (decompressed) {
+					this.handleMessage(decompressed);
+				}
+			});
+		} else {
+			this.handleMessage(data as Buffer);
+		}
+	}
+
+	private handleMessage(data: Buffer): void {
 		let payload: GatewayPayloadInfer;
 		try {
 			payload = JSON.parse(data.toString());
@@ -90,7 +115,7 @@ export class Gateway extends EventEmitter<GatewayReceiveEvents> {
 				this.startHeartbeat(payload.d.heartbeat_interval);
 				const identify: GatewayIdentifyStructureInfer = {
 					token: this.token,
-					compress: this.options.compress !== null,
+					compress: this.options.compress === null,
 					intents: this.options.intents,
 					large_threshold: this.options.large_threshold,
 					properties: this.options.properties,
@@ -102,7 +127,7 @@ export class Gateway extends EventEmitter<GatewayReceiveEvents> {
 			}
 
 			case GatewayOpcodes.HeartbeatACK: {
-				this.emit("DEBUG", "Heartbeat ACK");
+				this.emit("DEBUG", "[WS] Received heartbeat ACK");
 				break;
 			}
 
@@ -146,7 +171,7 @@ export class Gateway extends EventEmitter<GatewayReceiveEvents> {
 
 		this.emit("DEBUG", `[WS] Starting heartbeat with interval: ${interval}ms`);
 		this.heartbeatInterval = setInterval(() => {
-			this.emit("DEBUG", "Sending heartbeat...");
+			this.emit("DEBUG", "[WS] Sending heartbeat...");
 			this.send(GatewayOpcodes.Heartbeat, this.lastSeq);
 		}, interval);
 	}
@@ -170,6 +195,11 @@ export class Gateway extends EventEmitter<GatewayReceiveEvents> {
 		if (this.ws) {
 			this.ws.close();
 			this.ws = null;
+		}
+
+		if (this.inflate) {
+			this.inflate.close();
+			this.inflate = null;
 		}
 
 		this.lastSeq = null;

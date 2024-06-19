@@ -11,6 +11,7 @@
   "dependencies": {
     "@lunajs/core": "workspace:*",
     "eventemitter3": "^5.0.1",
+    "minizlib": "^3.0.1",
     "tslib": "^2.6.3",
     "ws": "^8.17.1",
     "zod": "^3.23.8"
