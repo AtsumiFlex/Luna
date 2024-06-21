@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@lunajs/ts-config",
+  "private": true,
+  "files": [
+    "next.json",
+    "node.json"
+  ],
+  "devDependencies": {
+    "typescript": "^5.5.2"
+  }
+}
