@@ -1,6 +1,7 @@
 import type { Integer, ISO8601Timestamp, Snowflake } from "../globals/formats";
 import type { Locales } from "../globals/locales";
 import type { Oauth2Scopes } from "../libs/oauth2";
+import type { ChannelStructure } from "./channels";
 import type { EmojiStructure } from "./emojis";
 import type { RoleStructure } from "./roles";
 import type { StickerStructure } from "./stickers";
@@ -383,9 +384,9 @@ export type GuildMemberStructure = {
  */
 export type GuildWidgetStructure = {
 	/**
-	 * TODO: Voice and stage channels which are accessible by @everyone
+	 * Voice and stage channels which are accessible by @everyone
 	 */
-	channels: Pick<unknown, "id" | "name" | "position">[];
+	channels: Pick<ChannelStructure, "id" | "name" | "position">[];
 	/**
 	 * Guild id
 	 */
@@ -397,7 +398,7 @@ export type GuildWidgetStructure = {
 	/**
 	 * Special widget user objects that includes users presence (Limit 100)
 	 */
-	members: Pick<UserStructure, "avatar_url" | "avatar" | "discriminator" | "id" | "status" | "username">[];
+	members: Pick<UserStructure, | "avatar" | "discriminator" | "id" | "username">[];
 	/**
 	 * Guild name (2-100 characters)
 	 */
@@ -748,6 +749,10 @@ export type GuildStructure = {
 	 * Banner hash
 	 */
 	banner: string | null;
+	/**
+	 * Channels in the guild
+	 */
+	channels: ChannelStructure[];
 	/**
 	 * Default message notifications level
 	 */
