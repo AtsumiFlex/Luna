@@ -10,10 +10,10 @@
     "test": "jest"
   },
   "dependencies": {
-    "tslib": "^2.6.3",
-    "zod": "^3.23.8"
+    "tslib": "^2.6.3"
   },
   "devDependencies": {
+    "@jest/types": "^29.6.3",
     "@lunajs/eslint-config": "workspace:*",
     "@lunajs/ts-config": "workspace:*",
     "@types/jest": "^29.5.12",
