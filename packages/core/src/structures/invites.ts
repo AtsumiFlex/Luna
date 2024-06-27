@@ -110,13 +110,9 @@ export type InviteStructure = {
 	 */
 	stage_instance?: InviteStageInstanceStructure;
 	/**
-     * The embedded application to open for this voice channel embedded application invite
-     */
-	target_application?: Partial<ApplicationStructure>;
-	/**
-	 * The type of invite
+	 * The embedded application to open for this voice channel embedded application invite
 	 */
-	type: InviteTypes;
+	target_application?: Partial<ApplicationStructure>;
 	/**
 	 * The type of target for this voice channel invite
 	 */
@@ -125,4 +121,8 @@ export type InviteStructure = {
 	 * The user whose stream to display for this voice channel stream invite
 	 */
 	target_user?: UserStructure;
+	/**
+	 * The type of invite
+	 */
+	type: InviteTypes;
 };

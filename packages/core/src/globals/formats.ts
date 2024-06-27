@@ -3,6 +3,7 @@ export type Integer = number;
 export type ISO8601Timestamp = string;
 export type True = "True" | 1 | true;
 export type False = "False" | 0 | false;
+export type Boolean = False | True;
 
 /**
  * @see {@link https://discord.com/developers/docs/reference#message-formatting-timestamp-styles}

@@ -401,33 +401,15 @@ export enum ApplicationCommandTypes {
 /**
  * @see {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure}
  */
-/**
- * id	snowflake	Unique ID of command	all
- * type?	one of application command type	Type of command, defaults to 1	all
- * application_id	snowflake	ID of the parent application	all
- * guild_id?	snowflake	Guild ID of the command, if not global	all
- * name	string	Name of command, 1-32 characters	all
- * name_localizations?	?dictionary with keys in available locales	Localization dictionary for name field. Values follow the same restrictions as name	all
- * description	string	Description for CHAT_INPUT commands, 1-100 characters. Empty string for USER and MESSAGE commands	all
- * description_localizations?	?dictionary with keys in available locales	Localization dictionary for description field. Values follow the same restrictions as description	all
- * options? *	array of application command option	Parameters for the command, max of 25	CHAT_INPUT
- * default_member_permissions	?string	Set of permissions represented as a bit set	all
- * dm_permission?	boolean	Deprecated (use contexts instead); Indicates whether the command is available in DMs with the app, only for globally-scoped commands. By default, commands are visible.	all
- * default_permission?	?boolean	Not recommended for use as field will soon be deprecated. Indicates whether the command is enabled by default when the app is added to a guild, defaults to true	all
- * nsfw?	boolean	Indicates whether the command is age-restricted, defaults to false	all
- * integration_types?	list of integration types	In preview. Installation context(s) where the command is available, only for globally-scoped commands. Defaults to GUILD_INSTALL (0)	all
- * contexts?	?list of interaction context types	In preview. Interaction context(s) where the command can be used, only for globally-scoped commands. By default, all interaction context types included for new commands.	all
- * version	snowflake	Autoincrementing version identifier updated during substantial record changes	all
- */
 export type ApplicationCommandStructure = {
 	/**
 	 * ID of the parent application
 	 */
 	application_id: Snowflake;
 	/**
-	 * TODO: In preview. Interaction context(s) where the command can be used, only for globally-scoped commands. By default, all interaction context types included for new commands.
+	 * In preview. Interaction context(s) where the command can be used, only for globally-scoped commands. By default, all interaction context types included for new commands.
 	 */
-	contexts?: string[];
+	contexts?: InteractionContextTypes[];
 	/**
 	 * Set of permissions represented as a bit set
 	 */
@@ -812,29 +794,25 @@ export type InteractionStructure = {
 	 */
 	guild_locale?: keyof Locales;
 	/**
-     * ID of the interaction
-     */
+	 * ID of the interaction
+	 */
 	id: Snowflake;
-	/**
-     * For components, the message they were attached to
-     */
-	message?: MessageStructure;
-	/**
-     * Read-only property, always 1
-     */
-	version: Integer;
 	/**
 	 * Selected language of the invoking user
 	 */
 	locale?: keyof Locales;
 	/**
-	 * Continuation token for responding to the interaction
-	 */
-	token: string;
-	/**
 	 * Guild member data for the invoking user, including permissions
 	 */
 	member?: GuildMemberStructure;
+	/**
+	 * For components, the message they were attached to
+	 */
+	message?: MessageStructure;
+	/**
+	 * Continuation token for responding to the interaction
+	 */
+	token: string;
 	/**
 	 * Type of interaction
 	 */
@@ -843,4 +821,8 @@ export type InteractionStructure = {
 	 * User object for the invoking user, if invoked in a DM
 	 */
 	user?: UserStructure;
+	/**
+	 * Read-only property, always 1
+	 */
+	version: Integer;
 };
